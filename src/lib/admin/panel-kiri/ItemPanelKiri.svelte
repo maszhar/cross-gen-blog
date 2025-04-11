@@ -1,13 +1,17 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import type { Snippet } from 'svelte';
 
 	interface Properti {
 		children?: Snippet;
-		aktif?: boolean;
+		href?: string;
 	}
-	const { children, aktif = false }: Properti = $props();
+	const { children, href }: Properti = $props();
+
+	const path = page.url.pathname;
+	const aktif = new RegExp('^' + href).test(path);
 </script>
 
-<div class="rounded px-4 py-2 {aktif ? 'bg-white text-black' : ''}">
+<a {href} class="rounded px-4 py-2 {aktif ? 'bg-white text-black' : ''}">
 	{@render children?.()}
-</div>
+</a>
