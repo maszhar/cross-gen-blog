@@ -1,6 +1,10 @@
 <script lang="ts">
 	import PanelKiri from '$lib/admin/panel-kiri/PanelKiri.svelte';
 	import Button from '$lib/common/ui/Button.svelte';
+	import Table from '$lib/common/ui/Table.svelte';
+	import TableColumn from '$lib/common/ui/TableColumn.svelte';
+	import TableHead from '$lib/common/ui/TableHead.svelte';
+	import TableRow from '$lib/common/ui/TableRow.svelte';
 	import Halaman from '$lib/customer/Halaman.svelte';
 	import Navbar from '$lib/customer/navbar/Navbar.svelte';
 </script>
@@ -19,34 +23,32 @@
 			<Button>Cari</Button>
 		</div>
 	</div>
-	<table class="mt-4 w-full border">
-		<thead class="border-b">
-			<tr class="text-left">
-				<th class="w-4 px-2">
+	<Table class="mt-4">
+		{#snippet head()}
+			<TableHead class="w-10">
+				<input type="checkbox" />
+			</TableHead>
+			<TableHead>Nama</TableHead>
+			<TableHead>Slug</TableHead>
+			<TableHead>Jumlah Artikel</TableHead>
+		{/snippet}
+		{#snippet body()}
+			<TableRow>
+				<TableColumn class="px-2">
 					<input type="checkbox" />
-				</th>
-				<th>Nama</th>
-				<th>Slug</th>
-				<th>Jumlah Artikel</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr class="odd:bg-zinc-100">
-				<td class="px-2">
+				</TableColumn>
+				<TableColumn>Proyek</TableColumn>
+				<TableColumn>proyek</TableColumn>
+				<TableColumn>0</TableColumn>
+			</TableRow>
+			<TableRow>
+				<TableColumn class="px-2">
 					<input type="checkbox" />
-				</td>
-				<td>Proyek</td>
-				<td>proyek</td>
-				<td>0</td>
-			</tr>
-			<tr class="odd:bg-zinc-100">
-				<td class="px-2">
-					<input type="checkbox" />
-				</td>
-				<td>Proyek</td>
-				<td>proyek</td>
-				<td>0</td>
-			</tr>
-		</tbody>
-	</table>
+				</TableColumn>
+				<TableColumn>Proyek</TableColumn>
+				<TableColumn>proyek</TableColumn>
+				<TableColumn>0</TableColumn>
+			</TableRow>
+		{/snippet}
+	</Table>
 </Halaman>
