@@ -1,6 +1,6 @@
 import { RepositoriArtikel } from '$lib/common/data/RepositoriArtikel';
 import type { Artikel } from '$lib/common/entitas/Artikel';
-import type { Connection } from 'mariadb';
+import { type Connection, SqlError } from 'mariadb';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -14,7 +14,12 @@ export const load: PageServerLoad = async ({ locals }) => {
 		const koleksiRingkasanArtikel = await repositoriArtikel.dapatkanKoleksiRingkasanArtikel();
 		dataKoleksiRingkasanArtikel = koleksiRingkasanArtikel.map((ringkasan) => ringkasan.serialize());
 	} catch (e: any) {
-		galat = e.message;
+		if (e instanceof SqlError && e.code === 'ER_NO_SUCH_TABLE') {
+			dataKoleksiRingkasanArtikel = [];
+			galat = undefined;
+		} else {
+			galat = e.message;
+		}
 	}
 
 	return {
