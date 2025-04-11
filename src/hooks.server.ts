@@ -20,10 +20,16 @@ try {
 }
 
 export const handle: Handle = async ({ event, resolve }) => {
+	// tangani galat database
 	if (db === undefined && galatDb === undefined) {
 		return new Response('Database belum tersambung.');
 	} else if (galatDb !== undefined) {
 		return new Response(galatDb.message);
+	}
+
+	// tangani permintaan sitemap.xml
+	if (event.url.pathname === '/sitemap.xml') {
+		return new Response('<sitemap></sitemap>');
 	}
 
 	const locals = event.locals as any;
