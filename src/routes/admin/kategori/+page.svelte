@@ -1,17 +1,22 @@
 <script lang="ts">
 	import PanelKiri from '$lib/admin/panel-kiri/PanelKiri.svelte';
+	import Button from '$lib/common/ui/Button.svelte';
 	import Halaman from '$lib/customer/Halaman.svelte';
 	import Navbar from '$lib/customer/navbar/Navbar.svelte';
 </script>
+
+<svelte:head>
+	<title>Kategori - Admin MZHR</title>
+</svelte:head>
 
 <Navbar />
 <PanelKiri />
 <Halaman panelKiriTerbuka>
 	<div class="flex justify-between gap-2">
-		<button>Tambah Kategori Baru</button>
+		<Button href="/admin/kategori/tambah">Tambah Kategori Baru</Button>
 		<div>
 			<input type="text" class="rounded border px-2 py-1" />
-			<button>Cari</button>
+			<Button>Cari</Button>
 		</div>
 	</div>
 	<table class="mt-4 w-full border">
