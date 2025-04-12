@@ -2,6 +2,7 @@ import type { Connection } from 'mariadb';
 import { Kategori } from '../entitas/Kategori';
 import { RepositoriDatabase } from './RepositoriDatabase';
 import { apakahGalatTidakAdaTabel } from '../alat/pengidentifikasi-galat-mariadb';
+import { GalatDataTidakDitemukan } from '../galat/GalatDataTidakDitemukan';
 
 export class RepositoriKategori extends RepositoriDatabase {
 	private static TABEL_KATEGORI = 'kategori' as const;
@@ -20,6 +21,24 @@ export class RepositoriKategori extends RepositoriDatabase {
 		} catch (e) {
 			if (apakahGalatTidakAdaTabel(e)) {
 				return [];
+			}
+			throw e;
+		}
+	}
+
+	async dapatkanKategori(id: BigInt): Promise<Kategori | null> {
+		try {
+			const koleksiDataMentah: any[] = await this.db.query(
+				`SELECT id, nama, slug FROM ${RepositoriKategori.TABEL_KATEGORI} WHERE id=?`,
+				[id]
+			);
+			if (koleksiDataMentah.length === 0) {
+				return null;
+			}
+			return Kategori.dariSql(koleksiDataMentah[0]);
+		} catch (e) {
+			if (apakahGalatTidakAdaTabel(e)) {
+				return null;
 			}
 			throw e;
 		}
@@ -46,6 +65,21 @@ export class RepositoriKategori extends RepositoriDatabase {
 				}
 			}
 		} while (cobaLagi);
+	}
+
+	async perbaruiKategori(kategori: Kategori): Promise<void> {
+		try {
+			await this.db.query(
+				`UPDATE ${RepositoriKategori.TABEL_KATEGORI} SET nama=?, slug=? WHERE id=?`,
+				[kategori.nama, kategori.slug, kategori.id]
+			);
+		} catch (e) {
+			if (apakahGalatTidakAdaTabel(e)) {
+				throw new GalatDataTidakDitemukan();
+			} else {
+				throw e;
+			}
+		}
 	}
 
 	private async buatTabelKategori() {
