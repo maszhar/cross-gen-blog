@@ -40,6 +40,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Tambah Kategori - Admin MZHR</title>
+</svelte:head>
+
 <Navbar />
 <PanelKiri />
 <Halaman panelKiriTerbuka>
