@@ -11,6 +11,36 @@ export class RepositoriKategori extends RepositoriDatabase {
 		super(db);
 	}
 
+	async dapatkanKoleksiKategoriTerbatas(
+		batas: bigint = 5n
+	): Promise<{ data: Kategori[]; jumlah: bigint }> {
+		try {
+			const koleksiDataMentah: any[] = await this.db.query(
+				`SELECT id, nama, slug FROM ${RepositoriKategori.TABEL_KATEGORI} LIMIT ?`,
+				[batas]
+			);
+			const koleksiKategori = koleksiDataMentah.map((dataMentah) => Kategori.dariSql(dataMentah));
+
+			const dataJumlahMentah: any[] = await this.db.query(
+				`SELECT COUNT(id) AS jumlah FROM ${RepositoriKategori.TABEL_KATEGORI}`
+			);
+			const jumlah = dataJumlahMentah[0].jumlah;
+
+			return {
+				data: koleksiKategori,
+				jumlah: jumlah
+			};
+		} catch (e) {
+			if (!apakahGalatTidakAdaTabel(e)) {
+				console.error(e);
+			}
+			return {
+				data: [],
+				jumlah: 0n
+			};
+		}
+	}
+
 	async dapatkanKoleksiKategori(): Promise<Kategori[]> {
 		try {
 			const koleksiDataMentah: any[] = await this.db.query(

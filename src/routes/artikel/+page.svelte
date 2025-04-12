@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Artikel } from '$lib/common/entitas/Artikel';
 	import H2 from '$lib/common/ui/H2.svelte';
-	import Halaman from '$lib/customer/Halaman.svelte';
+	import HalamanCustomer from '$lib/customer/HalamanCustomer.svelte';
 	import Navbar from '$lib/customer/navbar/Navbar.svelte';
 	import type { PageProps } from './$types';
 
@@ -13,7 +13,7 @@
 </script>
 
 <Navbar />
-<Halaman>
+<HalamanCustomer {data}>
 	<H2>Daftar Artikel</H2>
 
 	{#if koleksiRingkasanArtikel !== undefined}
@@ -28,4 +28,4 @@
 	{#if data.galat}
 		<div>{data.galat}</div>
 	{/if}
-</Halaman>
+</HalamanCustomer>

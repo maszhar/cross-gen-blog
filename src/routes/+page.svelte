@@ -1,14 +1,21 @@
 <script lang="ts">
 	import H2 from '$lib/common/ui/H2.svelte';
 	import P from '$lib/common/ui/P.svelte';
-	import Halaman from '$lib/customer/Halaman.svelte';
+	import HalamanCustomer from '$lib/customer/HalamanCustomer.svelte';
 	import KontainerKonten from '$lib/customer/KontainerKonten.svelte';
 	import Navbar from '$lib/customer/navbar/Navbar.svelte';
+	import type { PageProps } from './$types';
+
+	const { data }: PageProps = $props();
 </script>
+
+<svelte:head>
+	<title>MZHR - Mari Belajar untuk Memudahkan Kehidupan</title>
+</svelte:head>
 
 <Navbar />
 
-<Halaman>
+<HalamanCustomer {data}>
 	<KontainerKonten>
 		<H2>Selamat Datang</H2>
 
@@ -26,4 +33,4 @@
 			<li>WhatsApp: +62 821 4252 2975</li>
 		</ul>
 	</KontainerKonten>
-</Halaman>
+</HalamanCustomer>
