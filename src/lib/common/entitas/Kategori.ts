@@ -1,5 +1,5 @@
 export class Kategori {
-	id: BigInt;
+	id: bigint;
 	nama: string;
 	slug: string;
 
@@ -35,7 +35,7 @@ export class Kategori {
 }
 
 interface ParameterBuatKategori {
-	id?: BigInt;
+	id?: bigint;
 	nama: string;
 	slug: string;
 }

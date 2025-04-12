@@ -30,6 +30,30 @@
 		}
 	}
 
+	async function hapusKategori(indeks: number) {
+		if (!confirm(`Yakin ingin menghapus kategori '${koleksiKategori[indeks].nama}'`)) {
+			return;
+		}
+
+		try {
+			const idKategori = koleksiKategori[indeks].id;
+			const response = await fetch(`/api/admin/kategori/${idKategori.toString()}`, {
+				method: 'DELETE'
+			});
+			if (response.ok) {
+				koleksiKategori = koleksiKategori.filter((kategori) => kategori.id !== idKategori);
+			} else {
+				if (response.status === 404) {
+					alert('Kategori tidak ditemukan');
+				} else {
+					alert(await response.text());
+				}
+			}
+		} catch (e: any) {
+			alert(e.message);
+		}
+	}
+
 	$effect(() => {
 		dapatkanKoleksiKategori();
 	});
@@ -60,7 +84,7 @@
 		{/snippet}
 		{#snippet body()}
 			{#if !loading}
-				{#each koleksiKategori as kategori}
+				{#each koleksiKategori as kategori, indeks}
 					<TableRow>
 						<TableColumn class="px-2">
 							<input type="checkbox" />
@@ -69,10 +93,12 @@
 							<div>
 								<div>{kategori.nama}</div>
 								<div class="flex gap-2">
-									<ButtonInTable href={`/admin/kategori/${kategori.id}/${kategori.slug}`}
-										>Edit</ButtonInTable
-									>
-									<ButtonInTable color="red">Hapus</ButtonInTable>
+									<ButtonInTable href={`/admin/kategori/${kategori.id}/${kategori.slug}`}>
+										Edit
+									</ButtonInTable>
+									<ButtonInTable color="red" onclick={() => hapusKategori(indeks)}>
+										Hapus
+									</ButtonInTable>
 								</div>
 							</div>
 						</TableColumn>

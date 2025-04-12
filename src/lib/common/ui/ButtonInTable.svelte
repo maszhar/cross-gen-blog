@@ -6,8 +6,9 @@
 		class?: string;
 		color?: 'default' | 'red';
 		href?: string;
+		onclick?: () => void;
 	}
-	const { children, class: className = '', color = 'default', href }: Properti = $props();
+	const { children, class: className = '', color = 'default', href, onclick }: Properti = $props();
 </script>
 
 {#if href === undefined}
@@ -15,6 +16,7 @@
 		class="cursor-pointer text-xs hover:underline {color === 'red'
 			? 'text-red-600'
 			: ''} {className}"
+		{onclick}
 	>
 		{@render children?.()}
 	</button>

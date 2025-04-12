@@ -112,6 +112,21 @@ export class RepositoriKategori extends RepositoriDatabase {
 		}
 	}
 
+	async hapusKategori(idKategori: bigint): Promise<void> {
+		try {
+			const a = await this.db.execute(
+				`DELETE FROM ${RepositoriKategori.TABEL_KATEGORI} WHERE id=?`,
+				[idKategori]
+			);
+			console.log(a);
+		} catch (e) {
+			if (apakahGalatTidakAdaTabel(e)) {
+				throw new GalatDataTidakDitemukan();
+			}
+			throw e;
+		}
+	}
+
 	private async buatTabelKategori() {
 		await this.db.execute(
 			`CREATE TABLE IF NOT EXISTS ${RepositoriKategori.TABEL_KATEGORI} (id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, nama VARCHAR(100) NOT NULL, slug VARCHAR(50) NOT NULL)`

@@ -88,3 +88,47 @@ export async function PUT({ locals, params, request }) {
 		status: 204
 	});
 }
+
+/**
+ * hapus kategori
+ */
+export async function DELETE({ locals, params, request }) {
+	const db: Connection = (locals as any).db;
+	const repositoriKategori = RepositoriKategori.getInstance(db);
+
+	let idKategori = 0n;
+	try {
+		idKategori = BigInt(params.id);
+	} catch (e) {
+		return new Response(JSON.stringify({ error: 'parameter id harus bernilai angka' }), {
+			status: 400,
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+	}
+
+	try {
+		await repositoriKategori.hapusKategori(idKategori);
+	} catch (e: any) {
+		if (e instanceof GalatDataTidakDitemukan) {
+			return new Response(JSON.stringify({ error: 'Kategori lama tidak ditemukan' }), {
+				status: 404,
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+		} else {
+			return new Response(JSON.stringify({ error: e.message }), {
+				status: 500,
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+		}
+	}
+
+	return new Response(undefined, {
+		status: 204
+	});
+}
