@@ -16,6 +16,22 @@ export class Kategori {
 			slug: this.slug
 		};
 	}
+
+	static deserialize(data: any): Kategori {
+		return new Kategori({
+			id: BigInt(data.id),
+			nama: data.nama,
+			slug: data.slug
+		});
+	}
+
+	static dariSql(data: any): Kategori {
+		return new Kategori({
+			id: data.id,
+			nama: data.nama,
+			slug: data.slug
+		});
+	}
 }
 
 interface ParameterBuatKategori {

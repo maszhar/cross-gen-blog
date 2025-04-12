@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import Spinner from './Spinner.svelte';
 
 	interface Properti {
 		children?: Snippet;
@@ -30,7 +31,7 @@
 		{#if !loading}
 			{@render children?.()}
 		{:else}
-			<div class="h-6 w-6 animate-spin rounded-full border-r-2 border-l-2 border-sky-300"></div>
+			<Spinner />
 		{/if}
 	</button>
 {:else}

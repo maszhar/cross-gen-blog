@@ -1,5 +1,5 @@
 import type { Connection } from 'mariadb';
-import type { Kategori } from '../entitas/Kategori';
+import { Kategori } from '../entitas/Kategori';
 import { RepositoriDatabase } from './RepositoriDatabase';
 import { apakahGalatTidakAdaTabel } from '../alat/pengidentifikasi-galat-mariadb';
 
@@ -8,6 +8,21 @@ export class RepositoriKategori extends RepositoriDatabase {
 
 	private constructor(db: Connection) {
 		super(db);
+	}
+
+	async dapatkanKoleksiKategori(): Promise<Kategori[]> {
+		try {
+			const koleksiDataMentah: any[] = await this.db.query(
+				`SELECT id, nama, slug FROM ${RepositoriKategori.TABEL_KATEGORI}`
+			);
+			const koleksiKategori = koleksiDataMentah.map((dataMentah) => Kategori.dariSql(dataMentah));
+			return koleksiKategori;
+		} catch (e) {
+			if (apakahGalatTidakAdaTabel(e)) {
+				return [];
+			}
+			throw e;
+		}
 	}
 
 	async tambahKategori(kategori: Kategori): Promise<void> {
