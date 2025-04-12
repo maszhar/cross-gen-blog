@@ -43,7 +43,8 @@
 <Navbar />
 <PanelKiri />
 <Halaman panelKiriTerbuka>
-	<div class="mx-auto max-w-lg">
+	<Button href="/admin/kategori">&leftarrow; Kembali</Button>
+	<div class="mx-auto mt-8 max-w-lg">
 		<KontainerKonten>
 			<H3>Tambah Kategori</H3>
 

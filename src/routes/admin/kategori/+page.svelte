@@ -18,7 +18,7 @@
 <Halaman panelKiriTerbuka>
 	<div class="flex justify-between gap-2">
 		<Button href="/admin/kategori/tambah">Tambah Kategori Baru</Button>
-		<div>
+		<div class="flex gap-1">
 			<input type="text" class="rounded border px-2 py-1" />
 			<Button>Cari</Button>
 		</div>

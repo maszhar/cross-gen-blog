@@ -36,7 +36,7 @@
 {:else}
 	<a
 		{href}
-		class="cursor-pointer rounded border-2 border-sky-400 px-4 py-1 text-black hover:bg-sky-200 {className} flex items-center justify-center"
+		class="cursor-pointer rounded border-2 border-sky-400 px-4 py-1 text-black hover:bg-sky-200 {className} inline-flex items-center justify-center"
 	>
 		{@render children?.()}
 	</a>
