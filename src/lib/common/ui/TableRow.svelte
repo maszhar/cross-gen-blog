@@ -7,6 +7,6 @@
 	const { children }: Properti = $props();
 </script>
 
-<tr class="odd:bg-zinc-100">
+<tr class="align-top odd:bg-zinc-100">
 	{@render children?.()}
 </tr>

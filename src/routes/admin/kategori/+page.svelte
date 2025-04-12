@@ -2,6 +2,7 @@
 	import PanelKiri from '$lib/admin/panel-kiri/PanelKiri.svelte';
 	import { Kategori } from '$lib/common/entitas/Kategori';
 	import Button from '$lib/common/ui/Button.svelte';
+	import ButtonInTable from '$lib/common/ui/ButtonInTable.svelte';
 	import Spinner from '$lib/common/ui/Spinner.svelte';
 	import Table from '$lib/common/ui/Table.svelte';
 	import TableColumn from '$lib/common/ui/TableColumn.svelte';
@@ -64,7 +65,17 @@
 						<TableColumn class="px-2">
 							<input type="checkbox" />
 						</TableColumn>
-						<TableColumn>{kategori.nama}</TableColumn>
+						<TableColumn>
+							<div>
+								<div>{kategori.nama}</div>
+								<div class="flex gap-2">
+									<ButtonInTable href={`/admin/kategori/${kategori.id}/${kategori.slug}`}
+										>Edit</ButtonInTable
+									>
+									<ButtonInTable color="red">Hapus</ButtonInTable>
+								</div>
+							</div>
+						</TableColumn>
 						<TableColumn>{kategori.slug}</TableColumn>
 						<TableColumn>0</TableColumn>
 					</TableRow>
