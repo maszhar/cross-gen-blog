@@ -3,10 +3,11 @@
 
 	interface Properti {
 		children?: Snippet;
+		class?: string;
 	}
-	const { children }: Properti = $props();
+	const { children, class: className = '' }: Properti = $props();
 </script>
 
-<p class="mb-3 text-lg">
+<p class="mb-3 text-lg {className}">
 	{@render children?.()}
 </p>
