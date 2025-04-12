@@ -27,11 +27,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 		return new Response(galatDb.message);
 	}
 
-	// tangani permintaan sitemap.xml
-	if (event.url.pathname === '/sitemap.xml') {
-		return new Response('<sitemap></sitemap>');
-	}
-
 	const locals = event.locals as any;
 	locals.db = db;
 	locals.galatDb = galatDb;
