@@ -78,7 +78,7 @@ export class RepositoriArtikel extends RepositoriDatabase {
 				await this.db.beginTransaction();
 
 				const dataId = await this.db.query(
-					`INSERT INTO ${RepositoriArtikel.TABEL_ARTIKEL} (judul, slug) VALUES (?, ?) RETURNING id`,
+					`INSERT INTO ${RepositoriArtikel.TABEL_ARTIKEL} (judul, slug, modifikasi_terakhir_pada) VALUES (?, ?, FROM_UNIXTIME(${Math.floor(new Date().getTime() / 1000)})) RETURNING id`,
 					[artikel.judul, artikel.slug]
 				);
 				artikel.id = dataId[0].id;
@@ -133,7 +133,7 @@ export class RepositoriArtikel extends RepositoriDatabase {
 
 	private async buatTabelArtikel() {
 		await this.db.execute(
-			`CREATE TABLE IF NOT EXISTS ${RepositoriArtikel.TABEL_ARTIKEL} (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, judul VARCHAR(150) NOT NULL, slug VARCHAR(150) NOT NULL)`
+			`CREATE TABLE IF NOT EXISTS ${RepositoriArtikel.TABEL_ARTIKEL} (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, judul VARCHAR(150) NOT NULL, slug VARCHAR(150) NOT NULL, modifikasi_terakhir_pada TIMESTAMP NOT NULL)`
 		);
 	}
 
