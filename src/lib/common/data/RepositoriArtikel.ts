@@ -6,29 +6,46 @@ import { GalatDataTidakDitemukan } from '../galat/GalatDataTidakDitemukan';
 
 export class RepositoriArtikel extends RepositoriDatabase {
 	private static TABEL_ARTIKEL = 'artikel';
+	private static TABEL_ISI_ARTIKEL = 'isi_artikel';
 
 	private constructor(db: Connection) {
 		super(db);
 	}
 
 	async dapatkanKoleksiRingkasanArtikel(): Promise<Artikel[]> {
-		const dataArtikelMentah = await this.db.query('SELECT id, judul, slug FROM artikel');
-		const koleksiRingkasanArtikel = (dataArtikelMentah as any[]).map((dataMentah) =>
-			Artikel.dariSql(dataMentah)
-		);
+		try {
+			const dataArtikelMentah = await this.db.query('SELECT id, judul, slug FROM artikel');
+			const koleksiRingkasanArtikel = (dataArtikelMentah as any[]).map((dataMentah) =>
+				Artikel.dariSql(dataMentah)
+			);
 
-		return koleksiRingkasanArtikel;
+			return koleksiRingkasanArtikel;
+		} catch (e) {
+			if (apakahGalatTidakAdaTabel(e)) {
+				return [];
+			} else {
+				throw e;
+			}
+		}
 	}
 
 	async dapatkanKoleksiArtikelTanpaIsi(): Promise<Artikel[]> {
-		const dataArtikelMentah = await this.db.query(
-			`SELECT id, judul, slug FROM ${RepositoriArtikel.TABEL_ARTIKEL}`
-		);
-		const koleksiRingkasanArtikel = (dataArtikelMentah as any[]).map((dataMentah) =>
-			Artikel.dariSql(dataMentah)
-		);
+		try {
+			const dataArtikelMentah = await this.db.query(
+				`SELECT id, judul, slug FROM ${RepositoriArtikel.TABEL_ARTIKEL}`
+			);
+			const koleksiRingkasanArtikel = (dataArtikelMentah as any[]).map((dataMentah) =>
+				Artikel.dariSql(dataMentah)
+			);
 
-		return koleksiRingkasanArtikel;
+			return koleksiRingkasanArtikel;
+		} catch (e) {
+			if (apakahGalatTidakAdaTabel(e)) {
+				return [];
+			} else {
+				throw e;
+			}
+		}
 	}
 
 	async dapatkanArtikel(idArtikel: bigint): Promise<Artikel | null> {
@@ -65,6 +82,7 @@ export class RepositoriArtikel extends RepositoriDatabase {
 			} catch (e) {
 				if (apakahGalatTidakAdaTabel(e)) {
 					await this.buatTabelArtikel();
+					await this.buatTabelIsiArtikel();
 					cobaLagi = true;
 				} else {
 					throw e;
@@ -105,6 +123,12 @@ export class RepositoriArtikel extends RepositoriDatabase {
 	private async buatTabelArtikel() {
 		await this.db.execute(
 			`CREATE TABLE IF NOT EXISTS ${RepositoriArtikel.TABEL_ARTIKEL} (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, judul VARCHAR(150) NOT NULL, slug VARCHAR(150) NOT NULL)`
+		);
+	}
+
+	private async buatTabelIsiArtikel() {
+		await this.db.execute(
+			`CREATE TABLE IF NOT EXISTS ${RepositoriArtikel.TABEL_ISI_ARTIKEL} (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, isi LONGTEXT NOT NULL, urutan BIGINT UNSIGNED NOT NULL, id_artikel BIGINT UNSIGNED NOT NULL, FOREIGN KEY (id_artikel) REFERENCES ${RepositoriArtikel.TABEL_ARTIKEL} (id) ON UPDATE CASCADE ON DELETE CASCADE)`
 		);
 	}
 
