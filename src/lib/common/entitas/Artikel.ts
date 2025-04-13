@@ -3,11 +3,13 @@ import { IsiArtikel } from './IsiArtikel';
 export class Artikel {
 	id: number;
 	judul: string;
+	slug: string;
 	koleksiIsi: IsiArtikel[];
 
 	constructor(parameter: ParameterBuatArtikel) {
 		this.id = parameter.id ?? 0;
-		this.judul = parameter.judul ?? '';
+		this.judul = parameter.judul;
+		this.slug = parameter.slug;
 		this.koleksiIsi = parameter.koleksiIsi ?? [];
 	}
 
@@ -15,6 +17,7 @@ export class Artikel {
 		return {
 			id: this.id,
 			judul: this.judul,
+			slug: this.slug,
 			koleksiIsi: this.koleksiIsi.map((isi) => isi.serialize())
 		};
 	}
@@ -23,6 +26,7 @@ export class Artikel {
 		return new Artikel({
 			id: data.id,
 			judul: data.judul,
+			slug: data.slug,
 			koleksiIsi: data.koleksiIsi.map((item: any) => IsiArtikel.deserialize(item))
 		});
 	}
@@ -30,6 +34,7 @@ export class Artikel {
 	static dariSql(data: any): Artikel {
 		return new Artikel({
 			id: data.id,
+			slug: data.slug,
 			judul: data.judul
 		});
 	}
@@ -38,5 +43,6 @@ export class Artikel {
 interface ParameterBuatArtikel {
 	id?: number;
 	judul: string;
+	slug: string;
 	koleksiIsi?: IsiArtikel[];
 }

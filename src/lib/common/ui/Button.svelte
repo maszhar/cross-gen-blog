@@ -9,6 +9,7 @@
 		class?: string;
 		loading?: boolean;
 		disabled?: boolean;
+		onclick?: () => void;
 	}
 	const {
 		children,
@@ -16,7 +17,8 @@
 		href,
 		class: className = '',
 		loading = false,
-		disabled = false
+		disabled = false,
+		onclick
 	}: Properti = $props();
 </script>
 
@@ -27,6 +29,7 @@
 			? 'disabled:cursor-wait'
 			: 'disabled:cursor-not-allowed'} disabled:border-sky-100 disabled:hover:bg-white"
 		disabled={disabled || loading}
+		{onclick}
 	>
 		{#if !loading}
 			{@render children?.()}
