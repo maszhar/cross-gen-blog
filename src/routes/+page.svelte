@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Button from '$lib/common/ui/Button.svelte';
 	import H2 from '$lib/common/ui/H2.svelte';
 	import P from '$lib/common/ui/P.svelte';
 	import HalamanCustomer from '$lib/customer/HalamanCustomer.svelte';
@@ -25,7 +26,7 @@
 		</P>
 
 		<P>Silakan klik tombol di bawah untuk memulai:</P>
-		<a href="/artikel">Mulai</a>
+		<Button href="/artikel">Mulai</Button>
 		<br /><br />
 		<P>Jika membutuhkan komunikasi dengan saya, silakan hubungi kontak berikut :</P>
 		<ul>
