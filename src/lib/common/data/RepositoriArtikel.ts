@@ -15,7 +15,9 @@ export class RepositoriArtikel extends RepositoriDatabase {
 
 	async dapatkanKoleksiRingkasanArtikel(): Promise<Artikel[]> {
 		try {
-			const dataArtikelMentah = await this.db.query('SELECT id, judul, slug FROM artikel');
+			const dataArtikelMentah = await this.db.query(
+				'SELECT id, judul, slug, UNIX_TIMESTAMP(modifikasi_terakhir_pada) AS modifikasi_terakhir_pada FROM artikel ORDER BY modifikasi_terakhir_pada DESC'
+			);
 			const koleksiRingkasanArtikel = (dataArtikelMentah as any[]).map((dataMentah) =>
 				Artikel.dariSql(dataMentah)
 			);

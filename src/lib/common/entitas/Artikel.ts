@@ -5,12 +5,14 @@ export class Artikel {
 	judul: string;
 	slug: string;
 	koleksiIsi: IsiArtikel[];
+	modifikasiTerakhirPada: Date;
 
 	constructor(parameter: ParameterBuatArtikel) {
 		this.id = parameter.id ?? 0n;
 		this.judul = parameter.judul;
 		this.slug = parameter.slug;
 		this.koleksiIsi = parameter.koleksiIsi ?? [];
+		this.modifikasiTerakhirPada = parameter.modifikasiTerakhirPada ?? new Date();
 	}
 
 	serialize(): any {
@@ -18,7 +20,8 @@ export class Artikel {
 			id: this.id.toString(),
 			judul: this.judul,
 			slug: this.slug,
-			koleksiIsi: this.koleksiIsi.map((isi) => isi.serialize())
+			koleksiIsi: this.koleksiIsi.map((isi) => isi.serialize()),
+			modifikasiTerakhirPada: this.modifikasiTerakhirPada.getTime()
 		};
 	}
 
@@ -27,7 +30,8 @@ export class Artikel {
 			id: BigInt(data.id),
 			judul: data.judul,
 			slug: data.slug,
-			koleksiIsi: data.koleksiIsi.map((item: any) => IsiArtikel.deserialize(item))
+			koleksiIsi: data.koleksiIsi.map((item: any) => IsiArtikel.deserialize(item)),
+			modifikasiTerakhirPada: new Date(data.modifikasiTerakhirPada)
 		});
 	}
 
@@ -35,7 +39,10 @@ export class Artikel {
 		return new Artikel({
 			id: data.id,
 			slug: data.slug,
-			judul: data.judul
+			judul: data.judul,
+			modifikasiTerakhirPada: new Date(
+				parseInt((data.modifikasi_terakhir_pada as bigint).toString()) * 1000
+			)
 		});
 	}
 }
@@ -45,4 +52,5 @@ interface ParameterBuatArtikel {
 	judul: string;
 	slug: string;
 	koleksiIsi?: IsiArtikel[];
+	modifikasiTerakhirPada?: Date;
 }

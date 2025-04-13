@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { formatTanggal } from '$lib/common/alat/pengformat-tanggal';
 	import { Artikel } from '$lib/common/entitas/Artikel';
 	import H2 from '$lib/common/ui/H2.svelte';
 	import H5 from '$lib/common/ui/H5.svelte';
@@ -28,13 +29,18 @@
 				{#if koleksiRingkasanArtikel !== undefined}
 					{#each koleksiRingkasanArtikel as ringkasanArtikel}
 						<a
-							class="block border border-zinc-300 p-4"
+							class="relative block border border-zinc-300"
 							href={`/artikel/${ringkasanArtikel.id}/${ringkasanArtikel.slug}`}
 						>
-							<H5>{ringkasanArtikel.judul}</H5>
-							{#if ringkasanArtikel.koleksiIsi.length === 0}
-								<em>Tidak ada isi</em>
-							{/if}
+							<div class="absolute top-0 right-0 bg-green-700 px-4 py-1 text-white">
+								{formatTanggal(ringkasanArtikel.modifikasiTerakhirPada)}
+							</div>
+							<div class="p-4">
+								<H5>{ringkasanArtikel.judul}</H5>
+								{#if ringkasanArtikel.koleksiIsi.length === 0}
+									<em>Tidak ada isi</em>
+								{/if}
+							</div>
 						</a>
 					{/each}
 					{#if koleksiRingkasanArtikel.length === 0}
