@@ -2,8 +2,9 @@ import type { Connection } from 'mariadb';
 import type { LayoutServerLoad } from './$types';
 import { RepositoriKategori } from '$lib/common/data/RepositoriKategori';
 import type { Kategori } from '$lib/common/entitas/Kategori';
+import { PUBLIC_SITE_URL } from '$env/static/public';
 
-export const load: LayoutServerLoad = async ({ locals }) => {
+export const load: LayoutServerLoad = async ({ locals, url }) => {
 	const db: Connection = (locals as any).db;
 	const repositoriKategori = RepositoriKategori.getInstance(db);
 
@@ -15,11 +16,15 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 		koleksiKategori = hasilKoleksiKategori.data;
 		kategoriMasihAda = hasilKoleksiKategori.jumlah > 5n;
 	} catch (e: any) {
+		console.error(e);
 		koleksiKategori = [];
 	}
 
+	const canonical = PUBLIC_SITE_URL + url.pathname;
+
 	return {
 		dataKoleksiKategoriFooter: koleksiKategori.map((kategori) => kategori.serialize()),
-		kategoriFooterMasihAda: kategoriMasihAda
+		kategoriFooterMasihAda: kategoriMasihAda,
+		canonical
 	};
 };
