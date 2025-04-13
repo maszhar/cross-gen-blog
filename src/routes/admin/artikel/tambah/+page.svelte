@@ -1,8 +1,10 @@
 <script lang="ts">
 	import Button from '$lib/common/ui/Button.svelte';
 	import Navbar from '$lib/customer/navbar/Navbar.svelte';
+	import { AdminPageData } from '../../AdminPageData';
 	import EditorArtikel from '../EditorArtikel.svelte';
 
+	const adminData = AdminPageData.instance;
 	let submitting = $state(false);
 	let editor: EditorArtikel;
 
@@ -17,7 +19,8 @@
 			const response = await fetch(`/api/admin/artikel`, {
 				method: 'POST',
 				headers: {
-					'Content-Type': 'application/json'
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${adminData.kodeAkses}`
 				},
 				body: JSON.stringify({
 					judul: artikelBaru.judul,

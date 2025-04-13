@@ -1,12 +1,13 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import { Artikel } from '$lib/common/entitas/Artikel';
 	import Button from '$lib/common/ui/Button.svelte';
 	import Spinner from '$lib/common/ui/Spinner.svelte';
 	import Navbar from '$lib/customer/navbar/Navbar.svelte';
+	import { AdminPageData } from '../../AdminPageData';
 	import EditorArtikel from '../EditorArtikel.svelte';
 
+	const adminData = AdminPageData.instance;
 	let loading = $state(true);
 
 	const idArtikel = page.params.id;
@@ -19,7 +20,11 @@
 	async function muatData() {
 		loading = true;
 		try {
-			const response = await fetch(`/api/admin/artikel/${idArtikel}`);
+			const response = await fetch(`/api/admin/artikel/${idArtikel}`, {
+				headers: {
+					Authorization: `Bearer ${adminData.kodeAkses}`
+				}
+			});
 			if (response.ok) {
 				const dataResponse = await response.json();
 				artikelLama = Artikel.deserialize(dataResponse);
@@ -48,7 +53,8 @@
 			const response = await fetch(`/api/admin/artikel/${idArtikel}`, {
 				method: 'PUT',
 				headers: {
-					'Content-Type': 'application/json'
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${adminData.kodeAkses}`
 				},
 				body: JSON.stringify({
 					judul: artikelBaru.judul,

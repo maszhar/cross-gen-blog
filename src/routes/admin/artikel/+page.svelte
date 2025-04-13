@@ -10,7 +10,9 @@
 	import TableRow from '$lib/common/ui/TableRow.svelte';
 	import Halaman from '$lib/customer/Halaman.svelte';
 	import Navbar from '$lib/customer/navbar/Navbar.svelte';
+	import { AdminPageData } from '../AdminPageData';
 
+	const adminData = AdminPageData.instance;
 	const jumlahKolom = 5;
 	let loading = $state(true);
 
@@ -20,7 +22,11 @@
 	async function muatData() {
 		loading = true;
 		try {
-			const response = await fetch('/api/admin/artikel');
+			const response = await fetch('/api/admin/artikel', {
+				headers: {
+					Authorization: `Bearer ${adminData.kodeAkses}`
+				}
+			});
 			if (response.ok) {
 				const dataResponse = await response.json();
 				koleksiArtikel = (dataResponse as any[]).map((item) => Artikel.deserialize(item));
@@ -47,7 +53,10 @@
 		try {
 			const idArtikel = koleksiArtikel[indeks].id;
 			const response = await fetch(`/api/admin/artikel/${idArtikel.toString()}`, {
-				method: 'DELETE'
+				method: 'DELETE',
+				headers: {
+					Authorization: `Bearer ${adminData.kodeAkses}`
+				}
 			});
 			if (response.ok) {
 				koleksiArtikel = koleksiArtikel.filter((artikel) => artikel.id !== idArtikel);
