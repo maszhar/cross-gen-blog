@@ -42,6 +42,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Tambah Artikel - Admin MZHR</title>
+</svelte:head>
+
 <Navbar />
 
 <div class="pt-12">
