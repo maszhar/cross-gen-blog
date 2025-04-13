@@ -9,6 +9,14 @@ export class IsiArtikel {
 		this.urutan = parameter.urutan ?? -1n;
 	}
 
+	dapatkanId(): bigint {
+		return this.id;
+	}
+
+	aturId(id: bigint) {
+		this.id = id;
+	}
+
 	dapatkanIsi(): string {
 		return this.isi;
 	}
@@ -54,7 +62,7 @@ export class IsiArtikel {
 	}
 }
 
-interface ParameterBuatIsiArtikel {
+export interface ParameterBuatIsiArtikel {
 	id?: bigint;
 	isi?: string;
 	urutan?: bigint;

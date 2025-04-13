@@ -12,6 +12,7 @@
 	const { kunci = false, artikelLama }: Properti = $props();
 
 	let judul = $state('');
+	const koleksiIsiDihapus: bigint[] = [];
 
 	$effect(() => {
 		judul = judul.replaceAll(/(<([^>]+)>)/gi, '');
@@ -22,6 +23,9 @@
 	$effect(() => {
 		if (artikelLama) {
 			judul = artikelLama.judul;
+			koleksiIsi = artikelLama.koleksiIsi.map((isiArtikel) =>
+				IsiArtikelBerstatus.dariIsiArtikel(isiArtikel)
+			);
 		}
 	});
 
@@ -32,6 +36,9 @@
 	function hapusIsi(indeks: number) {
 		if (koleksiIsi.length === 1) {
 			return;
+		}
+		if (koleksiIsi[indeks].dapatkanId() !== 0n) {
+			koleksiIsiDihapus.push(koleksiIsi[indeks].dapatkanId());
 		}
 		koleksiIsi.splice(indeks, 1);
 	}
@@ -57,6 +64,10 @@
 			artikelLama.koleksiIsi = koleksiIsi;
 			return artikelLama;
 		}
+	}
+
+	export function ambilKoleksiIsiYangDihapus(): bigint[] {
+		return koleksiIsiDihapus;
 	}
 </script>
 

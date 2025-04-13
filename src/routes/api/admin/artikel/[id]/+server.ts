@@ -1,5 +1,6 @@
 import { RepositoriArtikel } from '$lib/common/data/RepositoriArtikel.js';
 import { Artikel } from '$lib/common/entitas/Artikel';
+import { IsiArtikelBerstatus } from '$lib/common/entitas/IsiArtikelBerstatus.svelte';
 import { GalatDataTidakDitemukan } from '$lib/common/galat/GalatDataTidakDitemukan.js';
 import type { Connection } from 'mariadb';
 
@@ -76,9 +77,13 @@ export async function PUT({ locals, params, request }) {
 		const artikel = new Artikel({
 			id: idArtikel,
 			judul: data.judul,
-			slug: data.slug
+			slug: data.slug,
+			koleksiIsi: data.koleksiIsi.map((item: any) => IsiArtikelBerstatus.deserialize(item))
 		});
-		await repositoriArtikel.perbaruiArtikel(artikel);
+		await repositoriArtikel.perbaruiArtikel(
+			artikel,
+			data.isiDihapus.map((id: string) => BigInt(id))
+		);
 
 		return new Response(undefined, {
 			status: 204

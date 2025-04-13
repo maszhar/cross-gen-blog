@@ -4,6 +4,7 @@ import { RepositoriDatabase } from './RepositoriDatabase';
 import { apakahGalatTidakAdaTabel } from '../alat/pengidentifikasi-galat-mariadb';
 import { GalatDataTidakDitemukan } from '../galat/GalatDataTidakDitemukan';
 import { IsiArtikel } from '../entitas/IsiArtikel';
+import type { IsiArtikelBerstatus } from '../entitas/IsiArtikelBerstatus.svelte';
 
 export class RepositoriArtikel extends RepositoriDatabase {
 	private static TABEL_ARTIKEL = 'artikel';
@@ -129,13 +130,32 @@ export class RepositoriArtikel extends RepositoriDatabase {
 		} while (cobaLagi);
 	}
 
-	async perbaruiArtikel(artikel: Artikel): Promise<void> {
+	async perbaruiArtikel(artikel: Artikel, koleksiIsiYangDihapus: bigint[]): Promise<void> {
 		try {
+			await this.db.beginTransaction();
+
 			await this.db.execute(
-				`UPDATE ${RepositoriArtikel.TABEL_ARTIKEL} SET judul=?, slug=? WHERE id=?`,
+				`UPDATE ${RepositoriArtikel.TABEL_ARTIKEL} SET judul=?, slug=?, modifikasi_terakhir_pada=FROM_UNIXTIME(${Math.floor(new Date().getTime() / 1000)}) WHERE id=?`,
 				[artikel.judul, artikel.slug, artikel.id]
 			);
+
+			for (const isiDihapus of koleksiIsiYangDihapus) {
+				await this.hapusIsiArtikel(isiDihapus);
+			}
+
+			for (const isiArtikel of (artikel.koleksiIsi as IsiArtikelBerstatus[]).filter(
+				(isiArtikel) => isiArtikel.apakahDiubah() || isiArtikel.apakahBaru()
+			)) {
+				if (isiArtikel.apakahBaru()) {
+					await this.tambahIsiArtikel(isiArtikel, artikel.id);
+				} else {
+					await this.perbaruiIsiArtikel(isiArtikel);
+				}
+			}
+
+			await this.db.commit();
 		} catch (e) {
+			await this.db.rollback();
 			if (apakahGalatTidakAdaTabel(e)) {
 				throw new GalatDataTidakDitemukan();
 			} else {
@@ -165,10 +185,24 @@ export class RepositoriArtikel extends RepositoriDatabase {
 	}
 
 	private async tambahIsiArtikel(isiArtikel: IsiArtikel, idArtikel: bigint): Promise<void> {
-		await this.db.execute(
-			`INSERT INTO ${RepositoriArtikel.TABEL_ISI_ARTIKEL} (isi, urutan, id_artikel) VALUES (?, ?, ?)`,
+		const idMentah = await this.db.query(
+			`INSERT INTO ${RepositoriArtikel.TABEL_ISI_ARTIKEL} (isi, urutan, id_artikel) VALUES (?, ?, ?) RETURNING id`,
 			[isiArtikel.dapatkanIsi(), isiArtikel.dapatkanUrutan(), idArtikel]
 		);
+		isiArtikel.aturId(idMentah[0].id);
+	}
+
+	private async perbaruiIsiArtikel(isiArtikel: IsiArtikel): Promise<void> {
+		await this.db.execute(
+			`UPDATE ${RepositoriArtikel.TABEL_ISI_ARTIKEL} SET isi=?, urutan=? WHERE id=?`,
+			[isiArtikel.dapatkanIsi(), isiArtikel.dapatkanUrutan(), isiArtikel.dapatkanId()]
+		);
+	}
+
+	private async hapusIsiArtikel(idIsiArtikel: bigint): Promise<void> {
+		await this.db.execute(`DELETE FROM ${RepositoriArtikel.TABEL_ISI_ARTIKEL} WHERE id=?`, [
+			idIsiArtikel
+		]);
 	}
 
 	private async buatTabelIsiArtikel() {

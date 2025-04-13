@@ -1,4 +1,4 @@
-import { IsiArtikel } from './IsiArtikel';
+import { IsiArtikel, type ParameterBuatIsiArtikel } from './IsiArtikel';
 
 export class IsiArtikelBerstatus extends IsiArtikel {
 	private diubah: boolean;
@@ -6,9 +6,7 @@ export class IsiArtikelBerstatus extends IsiArtikel {
 	private isiLangsung = $state('');
 
 	constructor(parameter: ParameterBuatIsiArtikelBerstatus = {}) {
-		super({
-			isi: parameter.isi
-		});
+		super(parameter);
 		this.isiLangsung = parameter.isi ?? '';
 		this.diubah = parameter.diubah ?? false;
 		this.baru = parameter.baru ?? false;
@@ -64,10 +62,19 @@ export class IsiArtikelBerstatus extends IsiArtikel {
 		artikel = IsiArtikel.deserialize(data, artikel) as IsiArtikelBerstatus;
 		return artikel;
 	}
+
+	static dariIsiArtikel(isiArtikel: IsiArtikel): IsiArtikelBerstatus {
+		return new IsiArtikelBerstatus({
+			baru: false,
+			diubah: false,
+			id: isiArtikel.dapatkanId(),
+			isi: isiArtikel.dapatkanIsi(),
+			urutan: isiArtikel.dapatkanUrutan()
+		});
+	}
 }
 
-interface ParameterBuatIsiArtikelBerstatus {
-	isi?: string;
+interface ParameterBuatIsiArtikelBerstatus extends ParameterBuatIsiArtikel {
 	diubah?: boolean;
 	baru?: boolean;
 }
