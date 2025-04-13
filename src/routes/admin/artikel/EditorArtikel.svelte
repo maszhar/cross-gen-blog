@@ -7,8 +7,9 @@
 
 	interface Properti {
 		kunci?: boolean;
+		artikelLama?: Artikel;
 	}
-	const { kunci = false }: Properti = $props();
+	const { kunci = false, artikelLama }: Properti = $props();
 
 	let judul = $state('');
 
@@ -17,6 +18,12 @@
 	});
 
 	let koleksiIsi: IsiArtikel[] = $state([new IsiArtikel()]);
+
+	$effect(() => {
+		if (artikelLama) {
+			judul = artikelLama.judul;
+		}
+	});
 
 	function tambahIsiDiBawahnya(indeks: number) {
 		koleksiIsi.splice(indeks, 0, new IsiArtikel());
@@ -35,10 +42,17 @@
 			return null;
 		}
 
-		return new Artikel({
-			judul: judul,
-			koleksiIsi: koleksiIsi
-		});
+		if (!artikelLama) {
+			return new Artikel({
+				judul: judul,
+				slug: '',
+				koleksiIsi: koleksiIsi
+			});
+		} else {
+			artikelLama.judul = judul;
+			artikelLama.koleksiIsi = koleksiIsi;
+			return artikelLama;
+		}
 	}
 </script>
 

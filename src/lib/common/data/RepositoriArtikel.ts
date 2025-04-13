@@ -31,6 +31,26 @@ export class RepositoriArtikel extends RepositoriDatabase {
 		return koleksiRingkasanArtikel;
 	}
 
+	async dapatkanArtikel(idArtikel: bigint): Promise<Artikel | null> {
+		try {
+			const dataArtikelMentah: any[] = await this.db.query(
+				`SELECT id, judul, slug FROM ${RepositoriArtikel.TABEL_ARTIKEL} WHERE id=?`,
+				[idArtikel]
+			);
+			if (dataArtikelMentah.length === 0) {
+				return null;
+			}
+
+			return Artikel.dariSql(dataArtikelMentah[0]);
+		} catch (e) {
+			if (apakahGalatTidakAdaTabel(e)) {
+				return null;
+			} else {
+				throw e;
+			}
+		}
+	}
+
 	async tambahArtikel(artikel: Artikel): Promise<void> {
 		let cobaLagi = false;
 		do {
@@ -51,6 +71,21 @@ export class RepositoriArtikel extends RepositoriDatabase {
 				}
 			}
 		} while (cobaLagi);
+	}
+
+	async perbaruiArtikel(artikel: Artikel): Promise<void> {
+		try {
+			await this.db.execute(
+				`UPDATE ${RepositoriArtikel.TABEL_ARTIKEL} SET judul=?, slug=? WHERE id=?`,
+				[artikel.judul, artikel.slug, artikel.id]
+			);
+		} catch (e) {
+			if (apakahGalatTidakAdaTabel(e)) {
+				throw new GalatDataTidakDitemukan();
+			} else {
+				throw e;
+			}
+		}
 	}
 
 	async hapusArtikel(idArtikel: bigint): Promise<void> {
