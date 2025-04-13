@@ -21,7 +21,7 @@
 		{#if artikel.koleksiIsi.length === 0 || artikel.koleksiIsi[0].dapatkanIsi().trim() === ''}
 			<meta name="description" content={artikel.judul} />
 		{:else}
-			<meta name="description" content={artikel.koleksiIsi[0].dapatkanIsi().slice(0, 30)} />
+			<meta name="description" content={artikel.koleksiIsi[0].dapatkanIsi().slice(0, 130)} />
 		{/if}
 	{:else}
 		<title>Artikel | MZHR</title>
