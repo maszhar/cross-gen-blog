@@ -1,6 +1,8 @@
 <script lang="ts">
 	import PanelKiri from '$lib/admin/panel-kiri/PanelKiri.svelte';
+	import { Artikel } from '$lib/common/entitas/Artikel';
 	import Button from '$lib/common/ui/Button.svelte';
+	import ButtonInTable from '$lib/common/ui/ButtonInTable.svelte';
 	import Spinner from '$lib/common/ui/Spinner.svelte';
 	import Table from '$lib/common/ui/Table.svelte';
 	import TableColumn from '$lib/common/ui/TableColumn.svelte';
@@ -11,6 +13,33 @@
 
 	const jumlahKolom = 5;
 	let loading = $state(true);
+
+	let koleksiArtikel: Artikel[] = $state([]);
+	let galat: string | null = $state(null);
+
+	async function muatData() {
+		loading = true;
+		try {
+			const response = await fetch('/api/admin/artikel');
+			if (response.ok) {
+				const dataResponse = await response.json();
+				koleksiArtikel = (dataResponse as any[]).map((item) => Artikel.deserialize(item));
+				galat = null;
+			} else {
+				koleksiArtikel = [];
+				galat = await response.text();
+			}
+		} catch (e: any) {
+			galat = e.message;
+		} finally {
+			loading = false;
+		}
+	}
+	$effect(() => {
+		muatData();
+	});
+
+	async function hapusArtikel(indeks: number) {}
 </script>
 
 <svelte:head>
@@ -32,24 +61,49 @@
 			<TableHead class="w-10">
 				<input type="checkbox" />
 			</TableHead>
-			<TableHead class="w-full">Nama</TableHead>
+			<TableHead class="w-full">Judul</TableHead>
 			<TableHead class="min-w-72">Slug</TableHead>
 			<TableHead class="w-24">Pembaca</TableHead>
 			<TableHead class="w-24">Komentar</TableHead>
 		{/snippet}
 		{#snippet body()}
-			{#if !loading}
-				<!-- {#if koleksiKategori.length === 0}
+			{#if !loading && !galat}
+				{#each koleksiArtikel as artikel, indeks}
+					<TableRow>
+						<TableColumn>
+							<input type="checkbox" />
+						</TableColumn>
+						<TableColumn>
+							<div>
+								<div>{artikel.judul}</div>
+								<div class="flex gap-2">
+									<ButtonInTable href={`/admin/artikel/${artikel.id}`}>Edit</ButtonInTable>
+									<ButtonInTable color="red" onclick={() => hapusArtikel(indeks)}>
+										Hapus
+									</ButtonInTable>
+								</div>
+							</div>
+						</TableColumn>
+						<TableColumn>{artikel.slug}</TableColumn>
+						<TableColumn>-</TableColumn>
+						<TableColumn>-</TableColumn>
+					</TableRow>
+				{/each}
+				{#if koleksiArtikel.length === 0}
 					<TableRow>
 						<TableColumn colspan={jumlahKolom} class="text-center italic">
-							Belum ada kategori
+							Belum ada artikel
 						</TableColumn>
 					</TableRow>
-				{/if} -->
+				{/if}
 			{:else}
 				<TableRow>
 					<TableColumn colspan={jumlahKolom} class="text-center">
-						<Spinner class="inline-block" />
+						{#if galat}
+							{galat}
+						{:else}
+							<Spinner class="inline-block" />
+						{/if}
 					</TableColumn>
 				</TableRow>
 			{/if}

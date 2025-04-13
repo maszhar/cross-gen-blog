@@ -11,7 +11,18 @@ export class RepositoriArtikel extends RepositoriDatabase {
 	}
 
 	async dapatkanKoleksiRingkasanArtikel(): Promise<Artikel[]> {
-		const dataArtikelMentah = await this.db!.query('SELECT id, judul FROM artikel');
+		const dataArtikelMentah = await this.db.query('SELECT id, judul, slug FROM artikel');
+		const koleksiRingkasanArtikel = (dataArtikelMentah as any[]).map((dataMentah) =>
+			Artikel.dariSql(dataMentah)
+		);
+
+		return koleksiRingkasanArtikel;
+	}
+
+	async dapatkanKoleksiArtikelTanpaIsi(): Promise<Artikel[]> {
+		const dataArtikelMentah = await this.db.query(
+			`SELECT id, judul, slug FROM ${RepositoriArtikel.TABEL_ARTIKEL}`
+		);
 		const koleksiRingkasanArtikel = (dataArtikelMentah as any[]).map((dataMentah) =>
 			Artikel.dariSql(dataMentah)
 		);

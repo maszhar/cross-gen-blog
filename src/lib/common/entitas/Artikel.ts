@@ -1,13 +1,13 @@
 import { IsiArtikel } from './IsiArtikel';
 
 export class Artikel {
-	id: number;
+	id: bigint;
 	judul: string;
 	slug: string;
 	koleksiIsi: IsiArtikel[];
 
 	constructor(parameter: ParameterBuatArtikel) {
-		this.id = parameter.id ?? 0;
+		this.id = parameter.id ?? 0n;
 		this.judul = parameter.judul;
 		this.slug = parameter.slug;
 		this.koleksiIsi = parameter.koleksiIsi ?? [];
@@ -15,7 +15,7 @@ export class Artikel {
 
 	serialize(): any {
 		return {
-			id: this.id,
+			id: this.id.toString(),
 			judul: this.judul,
 			slug: this.slug,
 			koleksiIsi: this.koleksiIsi.map((isi) => isi.serialize())
@@ -24,7 +24,7 @@ export class Artikel {
 
 	static deserialize(data: any): Artikel {
 		return new Artikel({
-			id: data.id,
+			id: BigInt(data.id),
 			judul: data.judul,
 			slug: data.slug,
 			koleksiIsi: data.koleksiIsi.map((item: any) => IsiArtikel.deserialize(item))
@@ -41,7 +41,7 @@ export class Artikel {
 }
 
 interface ParameterBuatArtikel {
-	id?: number;
+	id?: bigint;
 	judul: string;
 	slug: string;
 	koleksiIsi?: IsiArtikel[];
