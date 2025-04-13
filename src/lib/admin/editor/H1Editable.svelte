@@ -8,7 +8,7 @@
 </script>
 
 {#if !kunci}
-	<h2 class="mb-12 text-5xl font-bold {className}" contenteditable bind:innerHTML={value}></h2>
+	<h1 class="mb-12 text-5xl font-bold {className}" contenteditable bind:innerHTML={value}></h1>
 {:else}
-	<h2 class="mb-12 text-5xl font-bold {className}">{value}</h2>
+	<h1 class="mb-12 text-5xl font-bold {className}">{value}</h1>
 {/if}

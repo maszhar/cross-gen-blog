@@ -1,5 +1,5 @@
 <script lang="ts">
-	import H2 from '$lib/common/ui/H2.svelte';
+	import H1 from '$lib/common/ui/H1.svelte';
 	import Halaman from '$lib/customer/Halaman.svelte';
 	import Navbar from '$lib/customer/navbar/Navbar.svelte';
 </script>
@@ -7,7 +7,7 @@
 <Navbar />
 <Halaman>
 	<form class="mx-auto w-full max-w-md rounded border border-zinc-300 p-8" method="post">
-		<H2>Log In</H2>
+		<H1>Log In</H1>
 
 		<div class="flex flex-col">
 			<label for="email">Username/Email</label>

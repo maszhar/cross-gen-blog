@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Button from '$lib/common/ui/Button.svelte';
-	import H2 from '$lib/common/ui/H2.svelte';
+	import H1 from '$lib/common/ui/H1.svelte';
 	import P from '$lib/common/ui/P.svelte';
 	import HalamanCustomer from '$lib/customer/HalamanCustomer.svelte';
 	import KontainerKonten from '$lib/customer/KontainerKonten.svelte';
@@ -18,7 +18,7 @@
 
 <HalamanCustomer {data}>
 	<KontainerKonten>
-		<H2>Selamat Datang</H2>
+		<H1>Selamat Datang</H1>
 
 		<P>
 			Hai, saya Fikri Mustofa. Saya adalah penulis blog ini. Blog akan berisi tentang teknologi,

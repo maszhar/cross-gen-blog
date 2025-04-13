@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import H2 from '$lib/common/ui/H2.svelte';
+	import H1 from '$lib/common/ui/H1.svelte';
 	import Halaman from '$lib/customer/Halaman.svelte';
 	import Navbar from '$lib/customer/navbar/Navbar.svelte';
 	import { AdminPageData } from '../../../admin/AdminPageData';
@@ -43,7 +43,7 @@
 <Navbar />
 <Halaman>
 	<form class="mx-auto w-full max-w-md rounded border border-zinc-300 p-8" onsubmit={submit}>
-		<H2>Log In Admin</H2>
+		<H1>Log In Admin</H1>
 
 		<div class="mt-4 flex flex-col">
 			<label for="code">Kode Akses</label>

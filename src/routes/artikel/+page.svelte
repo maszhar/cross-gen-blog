@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { formatTanggal } from '$lib/common/alat/pengformat-tanggal';
 	import { Artikel } from '$lib/common/entitas/Artikel';
-	import H2 from '$lib/common/ui/H2.svelte';
+	import H1 from '$lib/common/ui/H1.svelte';
 	import H5 from '$lib/common/ui/H5.svelte';
 	import P from '$lib/common/ui/P.svelte';
 	import HalamanCustomer from '$lib/customer/HalamanCustomer.svelte';
@@ -24,7 +24,7 @@
 <HalamanCustomer {data}>
 	<LayoutBlog>
 		{#snippet kiri()}
-			<H2>Daftar Artikel</H2>
+			<H1>Daftar Artikel</H1>
 
 			<div class="flex flex-col gap-4">
 				{#if koleksiRingkasanArtikel !== undefined}

@@ -1,8 +1,8 @@
 <script lang="ts">
-	import H2Editable from '$lib/admin/editor/H2Editable.svelte';
+	import H1Editable from '$lib/admin/editor/H1Editable.svelte';
 	import { Artikel } from '$lib/common/entitas/Artikel';
 	import { IsiArtikelBerstatus } from '$lib/common/entitas/IsiArtikelBerstatus.svelte';
-	import H2 from '$lib/common/ui/H2.svelte';
+	import H1 from '$lib/common/ui/H1.svelte';
 	import ParagrafArtikel from './ParagrafArtikel.svelte';
 
 	interface Properti {
@@ -84,9 +84,9 @@
 
 <div class="flex flex-col">
 	<div class="relative">
-		<H2Editable class="outline-none" bind:value={judul} {kunci} />
+		<H1Editable class="outline-none" bind:value={judul} {kunci} />
 		{#if judul === ''}
-			<H2 class="absolute top-0 left-0 -z-10 opacity-20">Judul Artikel</H2>
+			<H1 class="absolute top-0 left-0 -z-10 opacity-20">Judul Artikel</H1>
 		{/if}
 	</div>
 

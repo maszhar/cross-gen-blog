@@ -8,6 +8,6 @@
 	const { children, class: className = '' }: Properti = $props();
 </script>
 
-<h2 class="mb-12 text-5xl font-bold {className}">
+<h1 class="mb-12 text-5xl font-bold {className}">
 	{@render children?.()}
-</h2>
+</h1>

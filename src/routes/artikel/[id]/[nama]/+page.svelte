@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { formatTanggal } from '$lib/common/alat/pengformat-tanggal';
 	import { Artikel } from '$lib/common/entitas/Artikel';
-	import Button from '$lib/common/ui/Button.svelte';
-	import H2 from '$lib/common/ui/H2.svelte';
+	import H1 from '$lib/common/ui/H1.svelte';
 	import P from '$lib/common/ui/P.svelte';
 	import HalamanCustomer from '$lib/customer/HalamanCustomer.svelte';
 	import KontainerKonten from '$lib/customer/KontainerKonten.svelte';
@@ -32,7 +31,7 @@
 					<div class="absolute top-0 right-0 bg-green-700 px-4 py-1 text-white">
 						{formatTanggal(artikel.modifikasiTerakhirPada)}
 					</div>
-					<H2>{artikel.judul}</H2>
+					<H1>{artikel.judul}</H1>
 
 					{#each artikel.koleksiIsi as isiArtikel}
 						<P>
