@@ -29,12 +29,23 @@
 		}
 	});
 
+	function dapatkanIdSementara(): bigint {
+		let hasil = -1n;
+		koleksiIsi.forEach((isi) => {
+			if (isi.dapatkanId() < hasil) {
+				hasil = isi.dapatkanId() - 1n;
+			}
+		});
+		return hasil;
+	}
+
 	function tambahIsiDiBawahnya(indeks: number) {
-		koleksiIsi.splice(indeks + 1, 0, new IsiArtikelBerstatus({ baru: true }));
+		const idSementara = dapatkanIdSementara();
+		koleksiIsi.splice(indeks + 1, 0, new IsiArtikelBerstatus({ id: idSementara, baru: true }));
 	}
 
 	function hapusIsi(indeks: number) {
-		if (koleksiIsi.length === 1) {
+		if (indeks === 0) {
 			return;
 		}
 		if (koleksiIsi[indeks].dapatkanId() !== 0n) {
@@ -79,7 +90,7 @@
 		{/if}
 	</div>
 
-	{#each koleksiIsi as isiArtikel, indeks}
+	{#each koleksiIsi as isiArtikel, indeks (isiArtikel.dapatkanId())}
 		<ParagrafArtikel
 			{isiArtikel}
 			tambahDiBawahnya={() => tambahIsiDiBawahnya(indeks)}

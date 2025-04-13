@@ -10,11 +10,6 @@
 	}
 	const { tambahDiBawahnya, hapus, isiArtikel }: Properti = $props();
 
-	let isi = $state('');
-	$effect(() => {
-		isi = isiArtikel.dapatkanIsi();
-	});
-
 	function tanganiKeyDown(e: KeyboardEvent) {
 		if (e.key === 'Enter') {
 			e.preventDefault();
@@ -30,7 +25,12 @@
 </script>
 
 <div class="relative">
-	<PEditable class="outline-none" value={isi} oninput={ubah} onkeydown={tanganiKeyDown} />
+	<PEditable
+		class="outline-none"
+		value={isiArtikel.dapatkanIsi()}
+		oninput={ubah}
+		onkeydown={tanganiKeyDown}
+	/>
 	{#if isiArtikel.dapatkanIsiLangsung() === ''}
 		<P class="absolute top-0 left-0 -z-10 opacity-20">Paragraf baru</P>
 	{/if}
