@@ -25,22 +25,24 @@
 		{#snippet kiri()}
 			<H2>Daftar Artikel</H2>
 
-			{#if koleksiRingkasanArtikel !== undefined}
-				{#each koleksiRingkasanArtikel as ringkasanArtikel}
-					<a
-						class="block border border-zinc-300 p-4"
-						href={`/artikel/${ringkasanArtikel.id}/${ringkasanArtikel.slug}`}
-					>
-						<H5>{ringkasanArtikel.judul}</H5>
-						{#if ringkasanArtikel.koleksiIsi.length === 0}
-							<em>Tidak ada isi</em>
-						{/if}
-					</a>
-				{/each}
-				{#if koleksiRingkasanArtikel.length === 0}
-					<em>Belum ada artikel</em>
+			<div class="flex flex-col gap-4">
+				{#if koleksiRingkasanArtikel !== undefined}
+					{#each koleksiRingkasanArtikel as ringkasanArtikel}
+						<a
+							class="block border border-zinc-300 p-4"
+							href={`/artikel/${ringkasanArtikel.id}/${ringkasanArtikel.slug}`}
+						>
+							<H5>{ringkasanArtikel.judul}</H5>
+							{#if ringkasanArtikel.koleksiIsi.length === 0}
+								<em>Tidak ada isi</em>
+							{/if}
+						</a>
+					{/each}
+					{#if koleksiRingkasanArtikel.length === 0}
+						<em>Belum ada artikel</em>
+					{/if}
 				{/if}
-			{/if}
+			</div>
 
 			{#if data.galat}
 				<div>{data.galat}</div>
