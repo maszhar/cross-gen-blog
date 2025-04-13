@@ -2,6 +2,7 @@ import type { Connection } from 'mariadb';
 import { Artikel } from '../entitas/Artikel';
 import { RepositoriDatabase } from './RepositoriDatabase';
 import { apakahGalatTidakAdaTabel } from '../alat/pengidentifikasi-galat-mariadb';
+import { GalatDataTidakDitemukan } from '../galat/GalatDataTidakDitemukan';
 
 export class RepositoriArtikel extends RepositoriDatabase {
 	private static TABEL_ARTIKEL = 'artikel';
@@ -50,6 +51,20 @@ export class RepositoriArtikel extends RepositoriDatabase {
 				}
 			}
 		} while (cobaLagi);
+	}
+
+	async hapusArtikel(idArtikel: bigint): Promise<void> {
+		try {
+			await this.db.execute(`DELETE FROM ${RepositoriArtikel.TABEL_ARTIKEL} WHERE id=?`, [
+				idArtikel
+			]);
+		} catch (e: any) {
+			if (apakahGalatTidakAdaTabel(e)) {
+				throw new GalatDataTidakDitemukan();
+			} else {
+				throw e;
+			}
+		}
 	}
 
 	private async buatTabelArtikel() {

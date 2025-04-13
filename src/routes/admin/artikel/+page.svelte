@@ -39,7 +39,29 @@
 		muatData();
 	});
 
-	async function hapusArtikel(indeks: number) {}
+	async function hapusArtikel(indeks: number) {
+		if (!confirm(`Yakin ingin menghapus artikel '${koleksiArtikel[indeks].judul}'`)) {
+			return;
+		}
+
+		try {
+			const idArtikel = koleksiArtikel[indeks].id;
+			const response = await fetch(`/api/admin/artikel/${idArtikel.toString()}`, {
+				method: 'DELETE'
+			});
+			if (response.ok) {
+				koleksiArtikel = koleksiArtikel.filter((artikel) => artikel.id !== idArtikel);
+			} else {
+				if (response.status === 404) {
+					alert('Artikel tidak ditemukan');
+				} else {
+					alert(await response.text());
+				}
+			}
+		} catch (e: any) {
+			alert(e.message);
+		}
+	}
 </script>
 
 <svelte:head>
