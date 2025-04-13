@@ -8,6 +8,6 @@
 	const { children, class: className = '' }: Properti = $props();
 </script>
 
-<p class="mb-3 text-lg {className}">
+<p class="mb-3 text-lg break-all {className}">
 	{@render children?.()}
 </p>

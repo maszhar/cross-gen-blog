@@ -14,6 +14,12 @@
 	}
 </script>
 
-<p class="mb-3 text-lg {className}" contenteditable {onkeydown} oninput={input} bind:this={elemen}>
+<p
+	class="mb-3 text-lg break-all {className}"
+	contenteditable
+	{onkeydown}
+	oninput={input}
+	bind:this={elemen}
+>
 	{value}
 </p>
