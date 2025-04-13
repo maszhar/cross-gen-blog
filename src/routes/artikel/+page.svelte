@@ -3,7 +3,6 @@
 	import H2 from '$lib/common/ui/H2.svelte';
 	import H5 from '$lib/common/ui/H5.svelte';
 	import HalamanCustomer from '$lib/customer/HalamanCustomer.svelte';
-	import KontainerKonten from '$lib/customer/KontainerKonten.svelte';
 	import LayoutBlog from '$lib/customer/LayoutBlog.svelte';
 	import Navbar from '$lib/customer/navbar/Navbar.svelte';
 	import type { PageProps } from './$types';
