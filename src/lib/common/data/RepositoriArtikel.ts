@@ -3,7 +3,7 @@ import { Artikel } from '../entitas/Artikel';
 import { RepositoriDatabase } from './RepositoriDatabase';
 import { apakahGalatTidakAdaTabel } from '../alat/pengidentifikasi-galat-mariadb';
 import { GalatDataTidakDitemukan } from '../galat/GalatDataTidakDitemukan';
-import type { IsiArtikel } from '../entitas/IsiArtikel';
+import { IsiArtikel } from '../entitas/IsiArtikel';
 
 export class RepositoriArtikel extends RepositoriDatabase {
 	private static TABEL_ARTIKEL = 'artikel';
@@ -21,6 +21,21 @@ export class RepositoriArtikel extends RepositoriDatabase {
 			const koleksiRingkasanArtikel = (dataArtikelMentah as any[]).map((dataMentah) =>
 				Artikel.dariSql(dataMentah)
 			);
+
+			if (koleksiRingkasanArtikel.length > 0) {
+				const dataKoleksiIsiArtikelMentah: any[] = await this.db.query(
+					`SELECT id, isi, urutan, id_artikel FROM ${RepositoriArtikel.TABEL_ISI_ARTIKEL} WHERE id_artikel IN (?) AND urutan=0`,
+					[koleksiRingkasanArtikel.map((artikel) => artikel.id)]
+				);
+				for (const dataMentah of dataKoleksiIsiArtikelMentah) {
+					const artikelTerkait = koleksiRingkasanArtikel.find(
+						(artikel) => artikel.id === dataMentah.id_artikel
+					);
+					if (artikelTerkait) {
+						artikelTerkait.koleksiIsi.push(IsiArtikel.dariSql(dataMentah));
+					}
+				}
+			}
 
 			return koleksiRingkasanArtikel;
 		} catch (e) {
@@ -61,7 +76,17 @@ export class RepositoriArtikel extends RepositoriDatabase {
 				return null;
 			}
 
-			return Artikel.dariSql(dataArtikelMentah[0]);
+			const artikel = Artikel.dariSql(dataArtikelMentah[0]);
+
+			const koleksiIsiArtikelMentah = await this.db.query(
+				`SELECT id, isi, urutan, id_artikel FROM ${RepositoriArtikel.TABEL_ISI_ARTIKEL} WHERE id_artikel=? ORDER BY urutan`,
+				[artikel.id]
+			);
+			for (const isiArtikelMentah of koleksiIsiArtikelMentah) {
+				artikel.koleksiIsi.push(IsiArtikel.dariSql(isiArtikelMentah));
+			}
+
+			return artikel;
 		} catch (e) {
 			if (apakahGalatTidakAdaTabel(e)) {
 				return null;

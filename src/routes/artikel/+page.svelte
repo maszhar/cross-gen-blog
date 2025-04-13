@@ -3,6 +3,7 @@
 	import { Artikel } from '$lib/common/entitas/Artikel';
 	import H2 from '$lib/common/ui/H2.svelte';
 	import H5 from '$lib/common/ui/H5.svelte';
+	import P from '$lib/common/ui/P.svelte';
 	import HalamanCustomer from '$lib/customer/HalamanCustomer.svelte';
 	import LayoutBlog from '$lib/customer/LayoutBlog.svelte';
 	import Navbar from '$lib/customer/navbar/Navbar.svelte';
@@ -37,7 +38,16 @@
 							</div>
 							<div class="p-4">
 								<H5>{ringkasanArtikel.judul}</H5>
-								{#if ringkasanArtikel.koleksiIsi.length === 0}
+
+								{#each ringkasanArtikel.koleksiIsi as isiArtikel}
+									<P>
+										{isiArtikel.dapatkanIsi().slice(0, 50)}{isiArtikel.dapatkanIsi().length > 50
+											? '...'
+											: ''}
+									</P>
+								{/each}
+
+								{#if ringkasanArtikel.koleksiIsi.length === 0 || (ringkasanArtikel.koleksiIsi.length === 1 && ringkasanArtikel.koleksiIsi[0].dapatkanIsi() === '')}
 									<em>Tidak ada isi</em>
 								{/if}
 							</div>

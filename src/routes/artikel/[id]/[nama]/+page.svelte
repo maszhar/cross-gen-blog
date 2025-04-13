@@ -34,7 +34,13 @@
 					</div>
 					<H2>{artikel.judul}</H2>
 
-					{#if artikel.koleksiIsi.length === 0}
+					{#each artikel.koleksiIsi as isiArtikel}
+						<P>
+							{isiArtikel.dapatkanIsi()}
+						</P>
+					{/each}
+
+					{#if artikel.koleksiIsi.length === 0 || (artikel.koleksiIsi.length === 1 && artikel.koleksiIsi[0].dapatkanIsi() === '')}
 						<P>
 							<em>Tidak ada isi</em>
 						</P>

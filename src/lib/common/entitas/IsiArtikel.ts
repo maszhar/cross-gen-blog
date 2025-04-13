@@ -44,6 +44,14 @@ export class IsiArtikel {
 		hasil!.urutan = BigInt(data.urutan);
 		return hasil!;
 	}
+
+	static dariSql(data: any): IsiArtikel {
+		return new IsiArtikel({
+			id: data.id,
+			isi: data.isi,
+			urutan: data.urutan
+		});
+	}
 }
 
 interface ParameterBuatIsiArtikel {
