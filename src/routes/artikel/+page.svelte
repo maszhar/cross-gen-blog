@@ -15,6 +15,10 @@
 	);
 </script>
 
+<svelte:head>
+	<title>Artikel | MZHR</title>
+</svelte:head>
+
 <Navbar />
 <HalamanCustomer {data}>
 	<LayoutBlog>
