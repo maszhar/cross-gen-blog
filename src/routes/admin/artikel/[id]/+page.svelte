@@ -52,7 +52,10 @@
 				},
 				body: JSON.stringify({
 					judul: artikelBaru.judul,
-					slug: artikelBaru.judul.toLowerCase().replaceAll(/\s+/g, '-'),
+					slug: artikelBaru.judul
+						.toLowerCase()
+						.replaceAll(/\s+/g, '-')
+						.replaceAll(/[^A-Za-z0-9-]/g, ''),
 					koleksiIsi: artikelBaru.koleksiIsi.map((isi) => isi.serialize()),
 					isiDihapus: editor?.ambilKoleksiIsiYangDihapus().map((id) => id.toString())
 				})
