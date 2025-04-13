@@ -11,7 +11,8 @@
 </script>
 
 <svelte:head>
-	<title>MZHR - Mari Belajar untuk Memudahkan Kehidupan</title>
+	<title>MZHR - Belajar untuk Memudahkan Kehidupan</title>
+	<meta name="description" content="Blog akan berisi tentang proyek IT dan pembelajaran." />
 </svelte:head>
 
 <Navbar />
@@ -21,8 +22,8 @@
 		<H1>Selamat Datang</H1>
 
 		<P>
-			Hai, saya Fikri Mustofa. Saya adalah penulis blog ini. Blog akan berisi tentang teknologi,
-			panduan, dan cerita pengalaman saya.
+			Hai, saya Fikri Mustofa. Saya adalah penulis blog ini. Blog akan berisi tentang proyek IT dan
+			pembelajaran.
 		</P>
 
 		<P>Silakan klik tombol di bawah untuk memulai:</P>
