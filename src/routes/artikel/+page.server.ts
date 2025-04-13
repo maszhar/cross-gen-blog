@@ -5,7 +5,7 @@ import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const db: Connection = (locals as any).db;
-	const repositoriArtikel = new RepositoriArtikel(db);
+	const repositoriArtikel = RepositoriArtikel.getInstance(db);
 
 	let galat: string | undefined = undefined;
 	let dataKoleksiRingkasanArtikel: Artikel[] | undefined = undefined;
