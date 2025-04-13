@@ -54,7 +54,7 @@ export class RepositoriArtikel extends RepositoriDatabase {
 	async dapatkanArtikel(idArtikel: bigint): Promise<Artikel | null> {
 		try {
 			const dataArtikelMentah: any[] = await this.db.query(
-				`SELECT id, judul, slug FROM ${RepositoriArtikel.TABEL_ARTIKEL} WHERE id=?`,
+				`SELECT id, judul, slug, UNIX_TIMESTAMP(modifikasi_terakhir_pada) AS modifikasi_terakhir_pada FROM ${RepositoriArtikel.TABEL_ARTIKEL} WHERE id=?`,
 				[idArtikel]
 			);
 			if (dataArtikelMentah.length === 0) {

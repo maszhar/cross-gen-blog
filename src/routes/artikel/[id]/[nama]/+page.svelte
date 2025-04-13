@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { formatTanggal } from '$lib/common/alat/pengformat-tanggal';
 	import { Artikel } from '$lib/common/entitas/Artikel';
 	import Button from '$lib/common/ui/Button.svelte';
 	import H2 from '$lib/common/ui/H2.svelte';
@@ -27,7 +28,10 @@
 	<LayoutBlog>
 		{#snippet kiri()}
 			{#if !data.galat && artikel}
-				<KontainerKonten>
+				<KontainerKonten class="relative">
+					<div class="absolute top-0 right-0 bg-green-700 px-4 py-1 text-white">
+						{formatTanggal(artikel.modifikasiTerakhirPada)}
+					</div>
 					<H2>{artikel.judul}</H2>
 
 					{#if artikel.koleksiIsi.length === 0}

@@ -40,9 +40,9 @@ export class Artikel {
 			id: data.id,
 			slug: data.slug,
 			judul: data.judul,
-			modifikasiTerakhirPada: new Date(
-				parseInt((data.modifikasi_terakhir_pada as bigint).toString()) * 1000
-			)
+			modifikasiTerakhirPada: data.modifikasi_terakhir_pada
+				? new Date(parseInt((data.modifikasi_terakhir_pada as bigint).toString()) * 1000)
+				: new Date(0)
 		});
 	}
 }
