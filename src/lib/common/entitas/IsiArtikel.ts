@@ -1,18 +1,12 @@
 export class IsiArtikel {
-	private diubah: boolean;
+	private id: bigint;
 	private isi: string;
+	private urutan: bigint;
 
 	constructor(parameter: ParameterBuatIsiArtikel = {}) {
-		this.diubah = parameter.diubah ?? false;
+		this.id = parameter.id ?? 0n;
 		this.isi = parameter.isi ?? '';
-	}
-
-	apakahDiubah(): boolean {
-		return this.diubah;
-	}
-
-	tandaiDiubah() {
-		this.diubah = true;
+		this.urutan = parameter.urutan ?? -1n;
 	}
 
 	dapatkanIsi(): string {
@@ -23,20 +17,37 @@ export class IsiArtikel {
 		this.isi = isi;
 	}
 
+	dapatkanUrutan(): bigint {
+		return this.urutan;
+	}
+
+	aturUrutan(urutan: bigint) {
+		this.urutan = urutan;
+	}
+
 	serialize(): any {
 		return {
-			isi: this.isi
+			id: this.id.toString(),
+			isi: this.isi,
+			urutan: this.urutan.toString()
 		};
 	}
 
-	static deserialize(data: any): IsiArtikel {
-		return new IsiArtikel({
-			isi: data.isi
-		});
+	static deserialize(data: any, objek?: IsiArtikel): IsiArtikel {
+		let hasil = objek;
+		if (!objek) {
+			hasil = new IsiArtikel();
+		}
+
+		hasil!.id = BigInt(data.id);
+		hasil!.isi = data.isi;
+		hasil!.urutan = BigInt(data.urutan);
+		return hasil!;
 	}
 }
 
 interface ParameterBuatIsiArtikel {
+	id?: bigint;
 	isi?: string;
-	diubah?: boolean;
+	urutan?: bigint;
 }

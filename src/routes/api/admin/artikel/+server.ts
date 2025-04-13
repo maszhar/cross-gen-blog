@@ -1,5 +1,6 @@
 import { RepositoriArtikel } from '$lib/common/data/RepositoriArtikel.js';
 import { Artikel } from '$lib/common/entitas/Artikel.js';
+import { IsiArtikelBerstatus } from '$lib/common/entitas/IsiArtikelBerstatus.svelte.js';
 import type { Connection } from 'mariadb';
 
 export async function GET({ locals }) {
@@ -32,13 +33,14 @@ export async function POST({ locals, request }) {
 	const db: Connection = (locals as any).db;
 	const repositoriArtikel = RepositoriArtikel.getInstance(db);
 
-	const data = await request.json();
-	const artikel = new Artikel({
-		judul: data.judul,
-		slug: data.slug
-	});
-
 	try {
+		const data = await request.json();
+		const artikel = new Artikel({
+			judul: data.judul,
+			slug: data.slug,
+			koleksiIsi: data.koleksiIsi.map((item: any) => IsiArtikelBerstatus.deserialize(item))
+		});
+
 		await repositoriArtikel.tambahArtikel(artikel);
 		return new Response(
 			JSON.stringify({

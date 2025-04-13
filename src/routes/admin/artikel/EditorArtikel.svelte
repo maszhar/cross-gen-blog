@@ -1,7 +1,7 @@
 <script lang="ts">
 	import H2Editable from '$lib/admin/editor/H2Editable.svelte';
 	import { Artikel } from '$lib/common/entitas/Artikel';
-	import { IsiArtikel } from '$lib/common/entitas/IsiArtikel';
+	import { IsiArtikelBerstatus } from '$lib/common/entitas/IsiArtikelBerstatus.svelte';
 	import H2 from '$lib/common/ui/H2.svelte';
 	import ParagrafArtikel from './ParagrafArtikel.svelte';
 
@@ -17,7 +17,7 @@
 		judul = judul.replaceAll(/(<([^>]+)>)/gi, '');
 	});
 
-	let koleksiIsi: IsiArtikel[] = $state([new IsiArtikel()]);
+	let koleksiIsi: IsiArtikelBerstatus[] = $state([new IsiArtikelBerstatus({ baru: true })]);
 
 	$effect(() => {
 		if (artikelLama) {
@@ -26,7 +26,7 @@
 	});
 
 	function tambahIsiDiBawahnya(indeks: number) {
-		koleksiIsi.splice(indeks, 0, new IsiArtikel());
+		koleksiIsi.splice(indeks + 1, 0, new IsiArtikelBerstatus({ baru: true }));
 	}
 
 	function hapusIsi(indeks: number) {
@@ -40,6 +40,10 @@
 		if (judul === '') {
 			alert('Mohon jangan kosongkan judul!');
 			return null;
+		}
+
+		for (let i = 0; i < koleksiIsi.length; i++) {
+			koleksiIsi[i].aturUrutan(BigInt(i));
 		}
 
 		if (!artikelLama) {
@@ -56,7 +60,7 @@
 	}
 </script>
 
-<div>
+<div class="flex flex-col">
 	<div class="relative">
 		<H2Editable class="outline-none" bind:value={judul} {kunci} />
 		{#if judul === ''}
@@ -66,6 +70,7 @@
 
 	{#each koleksiIsi as isiArtikel, indeks}
 		<ParagrafArtikel
+			{isiArtikel}
 			tambahDiBawahnya={() => tambahIsiDiBawahnya(indeks)}
 			hapus={() => hapusIsi(indeks)}
 		/>

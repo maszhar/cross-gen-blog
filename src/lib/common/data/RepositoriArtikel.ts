@@ -3,6 +3,7 @@ import { Artikel } from '../entitas/Artikel';
 import { RepositoriDatabase } from './RepositoriDatabase';
 import { apakahGalatTidakAdaTabel } from '../alat/pengidentifikasi-galat-mariadb';
 import { GalatDataTidakDitemukan } from '../galat/GalatDataTidakDitemukan';
+import type { IsiArtikel } from '../entitas/IsiArtikel';
 
 export class RepositoriArtikel extends RepositoriDatabase {
 	private static TABEL_ARTIKEL = 'artikel';
@@ -74,12 +75,22 @@ export class RepositoriArtikel extends RepositoriDatabase {
 			cobaLagi = false;
 
 			try {
+				await this.db.beginTransaction();
+
 				const dataId = await this.db.query(
 					`INSERT INTO ${RepositoriArtikel.TABEL_ARTIKEL} (judul, slug) VALUES (?, ?) RETURNING id`,
 					[artikel.judul, artikel.slug]
 				);
 				artikel.id = dataId[0].id;
+
+				for (const isiArtikel of artikel.koleksiIsi) {
+					await this.tambahIsiArtikel(isiArtikel, artikel.id);
+				}
+
+				await this.db.commit();
 			} catch (e) {
+				await this.db.rollback();
+
 				if (apakahGalatTidakAdaTabel(e)) {
 					await this.buatTabelArtikel();
 					await this.buatTabelIsiArtikel();
@@ -123,6 +134,13 @@ export class RepositoriArtikel extends RepositoriDatabase {
 	private async buatTabelArtikel() {
 		await this.db.execute(
 			`CREATE TABLE IF NOT EXISTS ${RepositoriArtikel.TABEL_ARTIKEL} (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, judul VARCHAR(150) NOT NULL, slug VARCHAR(150) NOT NULL)`
+		);
+	}
+
+	private async tambahIsiArtikel(isiArtikel: IsiArtikel, idArtikel: bigint): Promise<void> {
+		await this.db.execute(
+			`INSERT INTO ${RepositoriArtikel.TABEL_ISI_ARTIKEL} (isi, urutan, id_artikel) VALUES (?, ?, ?)`,
+			[isiArtikel.dapatkanIsi(), isiArtikel.dapatkanUrutan(), idArtikel]
 		);
 	}
 

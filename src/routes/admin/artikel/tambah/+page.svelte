@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import Button from '$lib/common/ui/Button.svelte';
 	import Navbar from '$lib/customer/navbar/Navbar.svelte';
 	import EditorArtikel from '../EditorArtikel.svelte';
@@ -22,14 +21,15 @@
 				},
 				body: JSON.stringify({
 					judul: artikelBaru.judul,
-					slug: artikelBaru.judul.toLowerCase().replaceAll(/\s+/g, '-')
+					slug: artikelBaru.judul.toLowerCase().replaceAll(/\s+/g, '-'),
+					koleksiIsi: artikelBaru.koleksiIsi.map((isi) => isi.serialize())
 				})
 			});
 			if (response.ok) {
 				const dataResponse = await response.json();
 				const idBaru: string = dataResponse.id;
 
-				goto(`/admin/artikel/${idBaru}`);
+				window.location.replace(`/admin/artikel/${idBaru}`);
 			} else {
 				alert(await response.text());
 			}
