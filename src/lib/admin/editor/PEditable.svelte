@@ -15,7 +15,7 @@
 </script>
 
 <p
-	class="mb-3 text-lg break-all {className}"
+	class="mb-3 break-all sm:text-lg {className}"
 	contenteditable
 	{onkeydown}
 	oninput={input}
