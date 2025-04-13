@@ -8,7 +8,7 @@
 	const { kiri, kanan }: Properti = $props();
 </script>
 
-<div class="flex gap-4">
+<div class="flex flex-col gap-4 lg:flex-row">
 	<div class="flex-grow">
 		{@render kiri?.()}
 	</div>
