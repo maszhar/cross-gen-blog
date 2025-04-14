@@ -36,7 +36,7 @@
 							<div class="absolute top-0 right-0 bg-green-700 px-4 py-1 text-white">
 								{formatTanggal(ringkasanArtikel.modifikasiTerakhirPada)}
 							</div>
-							<div class="p-4">
+							<div class="p-4 pt-8 md:p-8">
 								<H5>{ringkasanArtikel.judul}</H5>
 
 								{#each ringkasanArtikel.koleksiIsi as isiArtikel}
