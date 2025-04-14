@@ -21,7 +21,9 @@ export async function GET({ locals, params }) {
 	}
 
 	try {
-		const artikel = await repositoriArtikel.dapatkanArtikel(idArtikel);
+		const artikel = await repositoriArtikel.dapatkanArtikel({
+			idArtikel: idArtikel
+		});
 		if (artikel === null) {
 			return new Response(
 				JSON.stringify({

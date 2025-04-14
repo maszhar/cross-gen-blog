@@ -76,6 +76,10 @@
 			submitting = false;
 		}
 	}
+
+	async function terbitkan() {
+		console.log('JJJ');
+	}
 </script>
 
 <svelte:head>
@@ -89,8 +93,11 @@
 		<div class="flex flex-grow flex-col gap-8 p-8">
 			<div class="flex justify-between">
 				<Button href="/admin/artikel">&leftarrow; Kembali</Button>
-				<div>
+				<div class="flex gap-2">
 					<Button onclick={simpan} loading={submitting || loading}>Simpan</Button>
+					<Button onclick={terbitkan} loading={submitting || loading} disabled={artikelLama?.terbit}
+						>Terbitkan</Button
+					>
 				</div>
 			</div>
 			{#if !loading && !galat && artikelLama}

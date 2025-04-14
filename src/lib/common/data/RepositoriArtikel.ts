@@ -88,7 +88,7 @@ export class RepositoriArtikel extends RepositoriDatabase {
 
 			const queryWhere: { q: string; arg: any }[] = [];
 
-			if (!tanpaTerbit && parameter.terbitSaja) {
+			if (parameter.terbitSaja && !tanpaTerbit) {
 				queryWhere.push({
 					q: 'terbit=1',
 					arg: null
@@ -148,34 +148,79 @@ export class RepositoriArtikel extends RepositoriDatabase {
 		return koleksiArtikel;
 	}
 
-	async dapatkanArtikel(idArtikel: bigint): Promise<Artikel | null> {
-		try {
-			const dataArtikelMentah: any[] = await this.db.query(
-				`SELECT id, judul, slug, UNIX_TIMESTAMP(modifikasi_terakhir_pada) AS modifikasi_terakhir_pada FROM ${RepositoriArtikel.TABEL_ARTIKEL} WHERE id=?`,
-				[idArtikel]
-			);
-			if (dataArtikelMentah.length === 0) {
-				return null;
+	async dapatkanArtikel(parameter: ParameterDapatkanArtikel): Promise<Artikel | null> {
+		// kompatibilitas tabel versi 1
+		let tanpaTerbit = false;
+
+		let artikel: Artikel | null = null;
+
+		let cobaLagi = false;
+		do {
+			cobaLagi = false;
+
+			// persiapan query
+			let argumenSql: any[] = [];
+
+			let query = `SELECT id, judul, slug${tanpaTerbit ? '' : ', terbit'}, UNIX_TIMESTAMP(modifikasi_terakhir_pada) AS modifikasi_terakhir_pada FROM ${RepositoriArtikel.TABEL_ARTIKEL}`;
+
+			const queryWhere: { q: string; arg: any }[] = [];
+
+			queryWhere.push({
+				q: 'id=?',
+				arg: parameter.idArtikel
+			});
+
+			if (parameter.terbitSaja && !tanpaTerbit) {
+				queryWhere.push({
+					q: 'terbit=1',
+					arg: null
+				});
 			}
 
-			const artikel = Artikel.dariSql(dataArtikelMentah[0]);
-
-			const koleksiIsiArtikelMentah = await this.db.query(
-				`SELECT id, isi, urutan, id_artikel FROM ${RepositoriArtikel.TABEL_ISI_ARTIKEL} WHERE id_artikel=? ORDER BY urutan`,
-				[artikel.id]
-			);
-			for (const isiArtikelMentah of koleksiIsiArtikelMentah) {
-				artikel.koleksiIsi.push(IsiArtikel.dariSql(isiArtikelMentah));
+			// olah where
+			if (queryWhere.length > 0) {
+				query += ` WHERE ${queryWhere.map((item) => item.q).join(' AND ')}`;
+				const argQuery = queryWhere.map((item) => item.arg).filter((item) => item !== null);
+				if (argQuery.length > 0) {
+					argumenSql = [...argumenSql, ...argQuery];
+				}
 			}
 
-			return artikel;
-		} catch (e) {
-			if (apakahGalatTidakAdaTabel(e)) {
-				return null;
-			} else {
-				throw e;
+			try {
+				console.log(query, argumenSql);
+				const dataArtikelMentah: any[] = await this.db.query(query, argumenSql);
+				if (dataArtikelMentah.length === 0) {
+					return null;
+				}
+
+				artikel = Artikel.dariSql(dataArtikelMentah[0]);
+
+				if (artikel) {
+					const koleksiIsiArtikelMentah = await this.db.query(
+						`SELECT id, isi, urutan, id_artikel FROM ${RepositoriArtikel.TABEL_ISI_ARTIKEL} WHERE id_artikel=? ORDER BY urutan`,
+						[artikel.id]
+					);
+					for (const isiArtikelMentah of koleksiIsiArtikelMentah) {
+						artikel.koleksiIsi.push(IsiArtikel.dariSql(isiArtikelMentah));
+					}
+				}
+			} catch (e) {
+				if (apakahGalatTidakAdaTabel(e)) {
+					artikel = null;
+				} else if (
+					e instanceof SqlError &&
+					e.code === 'ER_BAD_FIELD_ERROR' &&
+					/'terbit'/.test(e.sqlMessage ?? '')
+				) {
+					tanpaTerbit = true;
+					cobaLagi = true;
+				} else {
+					throw e;
+				}
 			}
-		}
+		} while (cobaLagi);
+
+		return artikel;
 	}
 
 	async tambahArtikel(artikel: Artikel): Promise<void> {
@@ -325,4 +370,9 @@ export class RepositoriArtikel extends RepositoriDatabase {
 interface ParameterDapatkanKoleksiArtikel {
 	terbitSaja?: boolean;
 	denganRingkasan?: boolean;
+}
+
+interface ParameterDapatkanArtikel {
+	idArtikel: bigint;
+	terbitSaja?: boolean;
 }
