@@ -32,7 +32,7 @@
 	function dapatkanIdSementara(): bigint {
 		let hasil = -1n;
 		koleksiIsi.forEach((isi) => {
-			if (isi.dapatkanId() < hasil) {
+			if (isi.dapatkanId() <= hasil) {
 				hasil = isi.dapatkanId() - 1n;
 			}
 		});
