@@ -8,7 +8,7 @@ export async function GET({ locals }) {
 	const repositoriArtikel = RepositoriArtikel.getInstance(db);
 
 	try {
-		const koleksiArtikel = await repositoriArtikel.dapatkanKoleksiArtikelTanpaIsi();
+		const koleksiArtikel = await repositoriArtikel.dapatkanKoleksiArtikel();
 		return new Response(JSON.stringify(koleksiArtikel.map((artikel) => artikel.serialize())), {
 			headers: {
 				'Content-Type': 'application/json'

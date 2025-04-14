@@ -13,7 +13,7 @@
 	import { AdminPageData } from '../AdminPageData';
 
 	const adminData = AdminPageData.instance;
-	const jumlahKolom = 5;
+	const jumlahKolom = 6;
 	let loading = $state(true);
 
 	let koleksiArtikel: Artikel[] = $state([]);
@@ -92,8 +92,9 @@
 			<TableHead class="w-10">
 				<input type="checkbox" />
 			</TableHead>
-			<TableHead class="w-full">Judul</TableHead>
-			<TableHead class="min-w-72">Slug</TableHead>
+			<TableHead>Judul</TableHead>
+			<TableHead>Slug</TableHead>
+			<TableHead class="w-32">Status Terbit</TableHead>
 			<TableHead class="w-24">Pembaca</TableHead>
 			<TableHead class="w-24">Komentar</TableHead>
 		{/snippet}
@@ -116,6 +117,15 @@
 							</div>
 						</TableColumn>
 						<TableColumn>{artikel.slug}</TableColumn>
+						<TableColumn
+							class={`font-medium ${artikel.terbit ? 'text-green-600' : 'text-orange-600'}`}
+						>
+							{#if artikel.terbit}
+								Terbit
+							{:else}
+								Belum Terbit
+							{/if}
+						</TableColumn>
 						<TableColumn>-</TableColumn>
 						<TableColumn>-</TableColumn>
 					</TableRow>

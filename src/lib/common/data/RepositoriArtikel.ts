@@ -1,4 +1,4 @@
-import type { Connection } from 'mariadb';
+import { SqlError, type Connection } from 'mariadb';
 import { Artikel } from '../entitas/Artikel';
 import { RepositoriDatabase } from './RepositoriDatabase';
 import { apakahGalatTidakAdaTabel } from '../alat/pengidentifikasi-galat-mariadb';
@@ -65,6 +65,63 @@ export class RepositoriArtikel extends RepositoriDatabase {
 				throw e;
 			}
 		}
+	}
+
+	async dapatkanKoleksiArtikel(
+		parameter: ParameterDapatkanKoleksiArtikel = {}
+	): Promise<Artikel[]> {
+		// kompatibilitas tabel versi 1
+		let tanpaTerbit = false;
+
+		let cobaLagi = false;
+		do {
+			cobaLagi = false;
+
+			// persiapan query
+			let argumenSql: any[] = [];
+			let query = `SELECT id, judul, slug${tanpaTerbit ? '' : ', terbit'}, UNIX_TIMESTAMP(modifikasi_terakhir_pada) AS modifikasi_terakhir_pada FROM ${RepositoriArtikel.TABEL_ARTIKEL}`;
+
+			const queryWhere: { q: string; arg: any }[] = [];
+
+			if (parameter.terbitSaja) {
+				queryWhere.push({
+					q: 'terbit=1',
+					arg: null
+				});
+			}
+
+			// olah where
+			if (queryWhere.length > 0) {
+				query += ` WHERE ${queryWhere.map((item) => item.q).join(' AND ')}`;
+				const argQuery = queryWhere.map((item) => item.arg).filter((item) => item !== null);
+				if (argQuery.length > 0) {
+					argumenSql = [...argumenSql, ...argQuery];
+				}
+			}
+
+			// eksekusi query
+			try {
+				const dataArtikelMentah = await this.db.query(query, argumenSql);
+				const koleksiRingkasanArtikel = (dataArtikelMentah as any[]).map((dataMentah) =>
+					Artikel.dariSql(dataMentah)
+				);
+
+				return koleksiRingkasanArtikel;
+			} catch (e: any) {
+				if (apakahGalatTidakAdaTabel(e)) {
+					return [];
+				} else if (
+					e instanceof SqlError &&
+					e.code === 'ER_BAD_FIELD_ERROR' &&
+					/'terbit'/.test(e.sqlMessage ?? '')
+				) {
+					tanpaTerbit = true;
+					cobaLagi = true;
+				} else {
+					throw e;
+				}
+			}
+		} while (cobaLagi);
 	}
 
 	async dapatkanArtikel(idArtikel: bigint): Promise<Artikel | null> {
@@ -218,4 +275,8 @@ export class RepositoriArtikel extends RepositoriDatabase {
 		}
 		return RepositoriArtikel.instance;
 	}
+}
+
+interface ParameterDapatkanKoleksiArtikel {
+	terbitSaja?: boolean;
 }
