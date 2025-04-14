@@ -122,6 +122,7 @@ export class RepositoriArtikel extends RepositoriDatabase {
 				}
 			}
 		} while (cobaLagi);
+		return [];
 	}
 
 	async dapatkanArtikel(idArtikel: bigint): Promise<Artikel | null> {
