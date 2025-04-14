@@ -23,7 +23,10 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 	}
 
 	try {
-		artikel = await repositoriArtikel.dapatkanArtikel(idArtikel);
+		artikel = await repositoriArtikel.dapatkanArtikel({
+			idArtikel,
+			terbitSaja: true
+		});
 		if (artikel === null) {
 			galat = 'Artikel tidak ditemukan';
 		}
