@@ -297,6 +297,33 @@ export class RepositoriArtikel extends RepositoriDatabase {
 		}
 	}
 
+	async terbitkan(idArtikel: bigint): Promise<void> {
+		let cobaLagi = false;
+		do {
+			cobaLagi = false;
+
+			try {
+				await this.db.execute(
+					`UPDATE ${RepositoriArtikel.TABEL_ARTIKEL} SET terbit=1, modifikasi_terakhir_pada=FROM_UNIXTIME(${Math.floor(new Date().getTime() / 1000)}) WHERE id=?`,
+					[idArtikel]
+				);
+			} catch (e) {
+				if (apakahGalatTidakAdaTabel(e)) {
+					throw new GalatDataTidakDitemukan();
+				} else if (
+					e instanceof SqlError &&
+					e.code === 'ER_BAD_FIELD_ERROR' &&
+					/'terbit'/.test(e.sqlMessage ?? '')
+				) {
+					await this.upgradeTabelArtikelV1KeV2();
+					cobaLagi = true;
+				} else {
+					throw e;
+				}
+			}
+		} while (cobaLagi);
+	}
+
 	async hapusArtikel(idArtikel: bigint): Promise<void> {
 		try {
 			await this.db.execute(`DELETE FROM ${RepositoriArtikel.TABEL_ARTIKEL} WHERE id=?`, [

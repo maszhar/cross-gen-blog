@@ -78,7 +78,33 @@
 	}
 
 	async function terbitkan() {
-		console.log('JJJ');
+		if (!confirm('Yakin ingin menerbitkan?')) {
+			return;
+		}
+
+		const artikelBaru = editor?.ambilData();
+		if (!artikelBaru) {
+			return;
+		}
+
+		submitting = true;
+		try {
+			const response = await fetch(`/api/admin/artikel/${idArtikel}/terbitkan`, {
+				method: 'POST',
+				headers: {
+					Authorization: `Bearer ${adminData.kodeAkses}`
+				}
+			});
+			if (!response.ok) {
+				alert(await response.text());
+			}
+			await muatData();
+		} catch (e: any) {
+			console.error(e);
+			alert(e.message);
+		} finally {
+			submitting = false;
+		}
 	}
 </script>
 
