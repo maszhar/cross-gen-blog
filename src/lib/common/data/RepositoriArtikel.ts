@@ -76,6 +76,8 @@ export class RepositoriArtikel extends RepositoriDatabase {
 		// kompatibilitas tabel versi 1
 		let tanpaTerbit = false;
 
+		let koleksiArtikel: Artikel[] = [];
+
 		let cobaLagi = false;
 		do {
 			cobaLagi = false;
@@ -102,14 +104,32 @@ export class RepositoriArtikel extends RepositoriDatabase {
 				}
 			}
 
+			// urutkan data
+			query += ' ORDER BY modifikasi_terakhir_pada DESC';
+
 			// eksekusi query
 			try {
 				const dataArtikelMentah = await this.db.query(query, argumenSql);
-				const koleksiRingkasanArtikel = (dataArtikelMentah as any[]).map((dataMentah) =>
+				koleksiArtikel = (dataArtikelMentah as any[]).map((dataMentah) =>
 					Artikel.dariSql(dataMentah)
 				);
 
-				return koleksiRingkasanArtikel;
+				if (parameter.denganRingkasan) {
+					if (koleksiArtikel.length > 0) {
+						const dataKoleksiIsiArtikelMentah: any[] = await this.db.query(
+							`SELECT id, isi, urutan, id_artikel FROM ${RepositoriArtikel.TABEL_ISI_ARTIKEL} WHERE id_artikel IN (?) AND urutan=0`,
+							[koleksiArtikel.map((artikel) => artikel.id)]
+						);
+						for (const dataMentah of dataKoleksiIsiArtikelMentah) {
+							const artikelTerkait = koleksiArtikel.find(
+								(artikel) => artikel.id === dataMentah.id_artikel
+							);
+							if (artikelTerkait) {
+								artikelTerkait.koleksiIsi.push(IsiArtikel.dariSql(dataMentah));
+							}
+						}
+					}
+				}
 			} catch (e: any) {
 				if (apakahGalatTidakAdaTabel(e)) {
 					return [];
@@ -125,7 +145,7 @@ export class RepositoriArtikel extends RepositoriDatabase {
 				}
 			}
 		} while (cobaLagi);
-		return [];
+		return koleksiArtikel;
 	}
 
 	async dapatkanArtikel(idArtikel: bigint): Promise<Artikel | null> {
@@ -304,4 +324,5 @@ export class RepositoriArtikel extends RepositoriDatabase {
 
 interface ParameterDapatkanKoleksiArtikel {
 	terbitSaja?: boolean;
+	denganRingkasan?: boolean;
 }

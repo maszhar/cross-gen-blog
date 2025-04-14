@@ -11,7 +11,10 @@ export const load: PageServerLoad = async ({ locals }) => {
 	let dataKoleksiRingkasanArtikel: Artikel[] | undefined = undefined;
 
 	try {
-		const koleksiRingkasanArtikel = await repositoriArtikel.dapatkanKoleksiRingkasanArtikel();
+		const koleksiRingkasanArtikel = await repositoriArtikel.dapatkanKoleksiArtikel({
+			terbitSaja: true,
+			denganRingkasan: true
+		});
 		dataKoleksiRingkasanArtikel = koleksiRingkasanArtikel.map((ringkasan) => ringkasan.serialize());
 	} catch (e: any) {
 		galat = e.message;
