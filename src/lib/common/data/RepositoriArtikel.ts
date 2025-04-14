@@ -9,6 +9,9 @@ import type { IsiArtikelBerstatus } from '../entitas/IsiArtikelBerstatus.svelte'
 export class RepositoriArtikel extends RepositoriDatabase {
 	private static TABEL_ARTIKEL = 'artikel';
 	private static TABEL_ISI_ARTIKEL = 'isi_artikel';
+	private static KOLEKSI_DEFINISI_KOLOM = {
+		terbit: 'terbit TINYINT(1) UNSIGNED NOT NULL'
+	};
 
 	private constructor(db: Connection) {
 		super(db);
@@ -164,7 +167,7 @@ export class RepositoriArtikel extends RepositoriDatabase {
 				await this.db.beginTransaction();
 
 				const dataId = await this.db.query(
-					`INSERT INTO ${RepositoriArtikel.TABEL_ARTIKEL} (judul, slug, modifikasi_terakhir_pada) VALUES (?, ?, FROM_UNIXTIME(${Math.floor(new Date().getTime() / 1000)})) RETURNING id`,
+					`INSERT INTO ${RepositoriArtikel.TABEL_ARTIKEL} (judul, slug, modifikasi_terakhir_pada, terbit) VALUES (?, ?, FROM_UNIXTIME(${Math.floor(new Date().getTime() / 1000)}), 0) RETURNING id`,
 					[artikel.judul, artikel.slug]
 				);
 				artikel.id = dataId[0].id;
@@ -180,6 +183,13 @@ export class RepositoriArtikel extends RepositoriDatabase {
 				if (apakahGalatTidakAdaTabel(e)) {
 					await this.buatTabelArtikel();
 					await this.buatTabelIsiArtikel();
+					cobaLagi = true;
+				} else if (
+					e instanceof SqlError &&
+					e.code === 'ER_BAD_FIELD_ERROR' &&
+					/'terbit'/.test(e.sqlMessage ?? '')
+				) {
+					await this.upgradeTabelArtikelV1KeV2();
 					cobaLagi = true;
 				} else {
 					throw e;
@@ -238,10 +248,24 @@ export class RepositoriArtikel extends RepositoriDatabase {
 
 	private async buatTabelArtikel() {
 		await this.db.execute(
-			`CREATE TABLE IF NOT EXISTS ${RepositoriArtikel.TABEL_ARTIKEL} (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, judul VARCHAR(150) NOT NULL, slug VARCHAR(150) NOT NULL, modifikasi_terakhir_pada TIMESTAMP NOT NULL)`
+			`CREATE TABLE IF NOT EXISTS ${RepositoriArtikel.TABEL_ARTIKEL} (id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, judul VARCHAR(150) NOT NULL, slug VARCHAR(150) NOT NULL, modifikasi_terakhir_pada TIMESTAMP NOT NULL, ${RepositoriArtikel.KOLEKSI_DEFINISI_KOLOM.terbit})`
 		);
 	}
 
+	// tambah kolom terbit artikel
+	private async upgradeTabelArtikelV1KeV2() {
+		// tambah kolom terbit dan atur default true agar artikel lama tidak disembunyikan
+		await this.db.execute(
+			`ALTER TABLE IF EXISTS ${RepositoriArtikel.TABEL_ARTIKEL} ADD COLUMN ${RepositoriArtikel.KOLEKSI_DEFINISI_KOLOM.terbit} DEFAULT 1`
+		);
+
+		// hilangkan nilai default kolom terbit
+		await this.db.execute(
+			`ALTER TABLE IF EXISTS ${RepositoriArtikel.TABEL_ARTIKEL} MODIFY COLUMN ${RepositoriArtikel.KOLEKSI_DEFINISI_KOLOM.terbit}`
+		);
+	}
+
+	// === ISI ARTIKEL
 	private async tambahIsiArtikel(isiArtikel: IsiArtikel, idArtikel: bigint): Promise<void> {
 		const idMentah = await this.db.query(
 			`INSERT INTO ${RepositoriArtikel.TABEL_ISI_ARTIKEL} (isi, urutan, id_artikel) VALUES (?, ?, ?) RETURNING id`,

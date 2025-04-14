@@ -47,7 +47,7 @@ export class Artikel {
 			modifikasiTerakhirPada: data.modifikasi_terakhir_pada
 				? new Date(parseInt((data.modifikasi_terakhir_pada as bigint).toString()) * 1000)
 				: new Date(0),
-			terbit: data.terbit ?? false
+			terbit: !!data.terbit
 		});
 	}
 }
