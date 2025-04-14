@@ -69,11 +69,13 @@ export class RepositoriProyek extends RepositoriDatabase {
 
 	async perbaruiProyek(proyek: Proyek): Promise<void> {
 		try {
-			await this.db.query(`UPDATE ${RepositoriProyek.TABEL_PROYEK} SET nama=?, slug=? WHERE id=?`, [
-				proyek.nama,
-				proyek.slug,
-				proyek.id
-			]);
+			const hasil = await this.db.execute(
+				`UPDATE ${RepositoriProyek.TABEL_PROYEK} SET nama=?, slug=? WHERE id=?`,
+				[proyek.nama, proyek.slug, proyek.id]
+			);
+			if (hasil.affectedRows === 0) {
+				throw new GalatDataTidakDitemukan();
+			}
 		} catch (e) {
 			if (apakahGalatTidakAdaTabel(e)) {
 				throw new GalatDataTidakDitemukan();
@@ -85,10 +87,13 @@ export class RepositoriProyek extends RepositoriDatabase {
 
 	async hapusProyek(idProyek: bigint): Promise<void> {
 		try {
-			const a = await this.db.execute(`DELETE FROM ${RepositoriProyek.TABEL_PROYEK} WHERE id=?`, [
-				idProyek
-			]);
-			console.log(a);
+			const hasil = await this.db.execute(
+				`DELETE FROM ${RepositoriProyek.TABEL_PROYEK} WHERE id=?`,
+				[idProyek]
+			);
+			if (hasil.affectedRows === 0) {
+				throw new GalatDataTidakDitemukan();
+			}
 		} catch (e) {
 			if (apakahGalatTidakAdaTabel(e)) {
 				throw new GalatDataTidakDitemukan();
