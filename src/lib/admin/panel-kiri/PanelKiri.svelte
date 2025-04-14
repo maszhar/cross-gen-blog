@@ -6,5 +6,6 @@
 	<div class="flex h-full flex-col gap-1 overflow-y-auto bg-zinc-800 p-2 text-white">
 		<ItemPanelKiri href="/admin/artikel">Artikel</ItemPanelKiri>
 		<ItemPanelKiri href="/admin/kategori">Kategori</ItemPanelKiri>
+		<ItemPanelKiri href="/admin/proyek">Proyek</ItemPanelKiri>
 	</div>
 </div>
