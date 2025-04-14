@@ -83,7 +83,7 @@ export class RepositoriArtikel extends RepositoriDatabase {
 
 			const queryWhere: { q: string; arg: any }[] = [];
 
-			if (parameter.terbitSaja) {
+			if (!tanpaTerbit && parameter.terbitSaja) {
 				queryWhere.push({
 					q: 'terbit=1',
 					arg: null
