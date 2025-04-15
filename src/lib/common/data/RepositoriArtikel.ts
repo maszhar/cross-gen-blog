@@ -187,7 +187,6 @@ export class RepositoriArtikel extends RepositoriDatabase {
 			}
 
 			try {
-				console.log(query, argumenSql);
 				const dataArtikelMentah: any[] = await this.db.query(query, argumenSql);
 				if (dataArtikelMentah.length === 0) {
 					return null;
