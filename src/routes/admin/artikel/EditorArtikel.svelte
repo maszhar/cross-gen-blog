@@ -95,6 +95,7 @@
 			{isiArtikel}
 			tambahDiBawahnya={() => tambahIsiDiBawahnya(indeks)}
 			hapus={() => hapusIsi(indeks)}
+			baru={isiArtikel.apakahBaru()}
 		/>
 	{/each}
 </div>

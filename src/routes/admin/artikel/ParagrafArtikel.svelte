@@ -6,9 +6,10 @@
 	interface Properti {
 		tambahDiBawahnya: () => void;
 		hapus: () => void;
+		baru: boolean;
 		isiArtikel: IsiArtikelBerstatus;
 	}
-	const { tambahDiBawahnya, hapus, isiArtikel }: Properti = $props();
+	const { tambahDiBawahnya, hapus, isiArtikel, baru }: Properti = $props();
 
 	function tanganiKeyDown(e: KeyboardEvent) {
 		if (e.key === 'Enter') {
@@ -30,6 +31,7 @@
 		value={isiArtikel.dapatkanIsi()}
 		oninput={ubah}
 		onkeydown={tanganiKeyDown}
+		autofocus={baru}
 	/>
 	{#if isiArtikel.dapatkanIsiLangsung() === ''}
 		<P class="absolute top-0 left-0 -z-10 opacity-20">Paragraf baru</P>
