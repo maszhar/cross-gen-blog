@@ -87,9 +87,18 @@ export async function PUT({ locals, params, request }) {
 			data.isiDihapus.map((id: string) => BigInt(id))
 		);
 
-		return new Response(undefined, {
-			status: 204
-		});
+		return new Response(
+			JSON.stringify({
+				koleksiIdIsiArtikelBaru: (artikel.koleksiIsi as IsiArtikelBerstatus[])
+					.filter((isi) => isi.apakahBaru())
+					.map((isi) => isi.dapatkanId().toString())
+			}),
+			{
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			}
+		);
 	} catch (e: any) {
 		if (e instanceof GalatDataTidakDitemukan) {
 			return new Response(

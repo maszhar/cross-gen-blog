@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { Artikel } from '$lib/common/entitas/Artikel';
+	import type { IsiArtikelBerstatus } from '$lib/common/entitas/IsiArtikelBerstatus.svelte';
 	import Button from '$lib/common/ui/Button.svelte';
 	import Spinner from '$lib/common/ui/Spinner.svelte';
 	import Navbar from '$lib/customer/navbar/Navbar.svelte';
@@ -66,7 +67,27 @@
 					isiDihapus: editor?.ambilKoleksiIsiYangDihapus().map((id) => id.toString())
 				})
 			});
-			if (!response.ok) {
+			if (response.ok) {
+				const dataResponse = await response.json();
+				const koleksiIdIsiArtikelBaru: bigint[] = dataResponse.koleksiIdIsiArtikelBaru.map(
+					(item: string) => BigInt(item)
+				);
+
+				if (koleksiIdIsiArtikelBaru.length > 0) {
+					let indeksIdBaru = 0;
+					for (const isiArtikel of artikelLama!.koleksiIsi as IsiArtikelBerstatus[]) {
+						if (!isiArtikel.apakahBaru()) {
+							continue;
+						}
+
+						isiArtikel.aturIdDanTandaiLama(koleksiIdIsiArtikelBaru[indeksIdBaru++]);
+
+						if (indeksIdBaru + 1 > koleksiIdIsiArtikelBaru.length) {
+							break;
+						}
+					}
+				}
+			} else {
 				alert(await response.text());
 			}
 		} catch (e: any) {

@@ -32,6 +32,11 @@ export class IsiArtikelBerstatus extends IsiArtikel {
 		return this.isiLangsung;
 	}
 
+	aturIdDanTandaiLama(id: bigint) {
+		super.aturId(id);
+		this.tandaiLama();
+	}
+
 	override aturIsi(isi: string): void {
 		this.diubah = true;
 		this.isiLangsung = isi;
