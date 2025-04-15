@@ -28,7 +28,7 @@
 	{/if}
 </svelte:head>
 
-<Navbar />
+<Navbar linkKembali="/artikel" />
 <HalamanCustomer {data}>
 	<LayoutBlog>
 		{#snippet kiri()}
