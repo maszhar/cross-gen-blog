@@ -107,6 +107,11 @@ export class RepositoriArtikel extends RepositoriDatabase {
 			// urutkan data
 			query += ' ORDER BY modifikasi_terakhir_pada DESC';
 
+			// batasi data
+			if ((parameter.batas ?? 0) > 0) {
+				query += ` LIMIT ${parameter.batas}`;
+			}
+
 			// eksekusi query
 			try {
 				const dataArtikelMentah = await this.db.query(query, argumenSql);
@@ -396,6 +401,7 @@ export class RepositoriArtikel extends RepositoriDatabase {
 interface ParameterDapatkanKoleksiArtikel {
 	terbitSaja?: boolean;
 	denganRingkasan?: boolean;
+	batas?: number;
 }
 
 interface ParameterDapatkanArtikel {

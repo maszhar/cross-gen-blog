@@ -31,7 +31,7 @@
 					{#each koleksiRingkasanArtikel as ringkasanArtikel}
 						<a
 							class="relative block border border-zinc-300"
-							href={`/artikel/${ringkasanArtikel.id}/${ringkasanArtikel.slug}`}
+							href={ringkasanArtikel.dapatkanLinkPublik()}
 						>
 							<div class="absolute top-0 right-0 bg-green-700 px-4 py-1 text-white">
 								{formatTanggal(ringkasanArtikel.modifikasiTerakhirPada)}

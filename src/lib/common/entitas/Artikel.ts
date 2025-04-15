@@ -17,6 +17,10 @@ export class Artikel {
 		this.terbit = parameter.terbit ?? false;
 	}
 
+	dapatkanLinkPublik(): string {
+		return `/artikel/${this.id}/${this.slug}`;
+	}
+
 	serialize(): any {
 		return {
 			id: this.id.toString(),

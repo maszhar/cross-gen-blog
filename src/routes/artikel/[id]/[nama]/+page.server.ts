@@ -7,6 +7,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 	const db: Connection = (locals as any).db;
 	const repositoriArtikel = RepositoriArtikel.getInstance(db);
 
+	let koleksiArtikelTerbaru: Artikel[] = [];
 	let artikel: Artikel | null = null;
 	let galat: string | null = null;
 
@@ -35,8 +36,18 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 		artikel = null;
 	}
 
+	try {
+		koleksiArtikelTerbaru = await repositoriArtikel.dapatkanKoleksiArtikel({
+			terbitSaja: true,
+			batas: 5
+		});
+	} catch (e: any) {
+		koleksiArtikelTerbaru = [];
+	}
+
 	return {
 		galat,
-		artikel: artikel?.serialize()
+		artikel: artikel?.serialize(),
+		koleksiArtikelTerbaru: koleksiArtikelTerbaru.map((artikel) => artikel.serialize())
 	};
 };

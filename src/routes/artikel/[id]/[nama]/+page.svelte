@@ -7,11 +7,15 @@
 	import KontainerKonten from '$lib/customer/KontainerKonten.svelte';
 	import LayoutBlog from '$lib/customer/LayoutBlog.svelte';
 	import Navbar from '$lib/customer/navbar/Navbar.svelte';
+	import DaftarArtikelTerbaru from '../../DaftarArtikelTerbaru.svelte';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
 
 	const artikel = data.artikel ? Artikel.deserialize(data.artikel) : null;
+	const koleksiArtikelTerbaru = data.koleksiArtikelTerbaru!.map((item) =>
+		Artikel.deserialize(item)
+	);
 </script>
 
 <svelte:head>
@@ -54,6 +58,9 @@
 			{:else}
 				{data.galat ?? ''}
 			{/if}
+		{/snippet}
+		{#snippet kanan()}
+			<DaftarArtikelTerbaru koleksiArtikel={koleksiArtikelTerbaru} />
 		{/snippet}
 	</LayoutBlog>
 </HalamanCustomer>
