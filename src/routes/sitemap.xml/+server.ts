@@ -26,7 +26,9 @@ export async function GET({ locals }) {
 	sitemap += '  </url>\n';
 
 	// artikel
-	const koleksiArtikel = await repositoriArtikel.dapatkanKoleksiArtikelTanpaIsi();
+	const koleksiArtikel = await repositoriArtikel.dapatkanKoleksiArtikel({
+		terbitSaja: true
+	});
 	const koleksiMetaArtikel = koleksiArtikel.map((artikel) => ({
 		url: `${PUBLIC_SITE_URL}/artikel/${artikel.id.toString()}/${artikel.slug}`,
 		tanggal: artikel.modifikasiTerakhirPada
