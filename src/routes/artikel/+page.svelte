@@ -41,7 +41,7 @@
 
 								{#each ringkasanArtikel.koleksiIsi as isiArtikel}
 									<P>
-										{isiArtikel.dapatkanIsi().slice(0, 50)}{isiArtikel.dapatkanIsi().length > 50
+										{isiArtikel.dapatkanIsi().slice(0, 300)}{isiArtikel.dapatkanIsi().length > 300
 											? '...'
 											: ''}
 									</P>
