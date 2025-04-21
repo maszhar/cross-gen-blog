@@ -12,7 +12,7 @@
 	<div class="flex-grow">
 		{@render kiri?.()}
 	</div>
-	<div class="w-full max-w-80 flex-none">
+	<div class="w-full flex-none lg:max-w-80">
 		{@render kanan?.()}
 	</div>
 </div>
