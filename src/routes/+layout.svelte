@@ -17,20 +17,24 @@
 			}
 		});
 	});
+
+	function generateTagFunction(gtagId: string): string {
+		let hasil = `<script async src="https://www.googletagmanager.com/gtag/js?id=${gtagId}">${`<`}/script>\n`;
+		hasil += `<script>\n`;
+		hasil += `  window.dataLayer = window.dataLayer || [];\n`;
+		hasil += `  function gtag(){dataLayer.push(arguments);}\n`;
+		hasil += `  gtag('js', new Date());\n`;
+		hasil += `  gtag('config', '${gtagId}');\n`;
+		hasil += `${`<`}/script>`;
+		return hasil;
+	}
 </script>
 
 <svelte:head>
 	<link rel="canonical" href={data.canonical} />
+
 	{#if data.gtagId}
-		<script async src={`https://www.googletagmanager.com/gtag/js?id=${data.gtagId}`}></script>
-		<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag() {
-				window.dataLayer.push(arguments);
-			}
-			gtag('js', new Date());
-			gtag('config', data.gtagId, { page_path: location.pathname });
-		</script>
+		{@html generateTagFunction(data.gtagId)}
 	{/if}
 </svelte:head>
 
