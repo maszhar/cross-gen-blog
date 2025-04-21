@@ -4,7 +4,6 @@
 	import P from '$lib/common/ui/P.svelte';
 	import HalamanCustomer from '$lib/customer/HalamanCustomer.svelte';
 	import KontainerKonten from '$lib/customer/KontainerKonten.svelte';
-	import Navbar from '$lib/customer/navbar/Navbar.svelte';
 	import type { PageProps } from './$types';
 
 	const { data }: PageProps = $props();
@@ -14,8 +13,6 @@
 	<title>MZHR - Belajar untuk Memudahkan Kehidupan</title>
 	<meta name="description" content="Blog akan berisi tentang proyek IT dan pembelajaran." />
 </svelte:head>
-
-<Navbar />
 
 <HalamanCustomer {data}>
 	<KontainerKonten>

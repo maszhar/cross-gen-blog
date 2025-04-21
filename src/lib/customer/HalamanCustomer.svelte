@@ -3,6 +3,7 @@
 	import Halaman from './Halaman.svelte';
 	import H5 from '$lib/common/ui/H5.svelte';
 	import { Kategori } from '$lib/common/entitas/Kategori';
+	import NavbarCustomer from './NavbarCustomer.svelte';
 
 	interface Properti {
 		children?: Snippet;
@@ -11,14 +12,24 @@
 			dataKoleksiKategoriFooter: any[];
 			kategoriFooterMasihAda: boolean;
 		};
+		linkKembali?: string;
 	}
-	const { children, panelKiriTerbuka = false, data }: Properti = $props();
+	const { children, panelKiriTerbuka = false, data, linkKembali }: Properti = $props();
 
 	const koleksiKategoriFooter = data.dataKoleksiKategoriFooter.map((item) =>
 		Kategori.deserialize(item)
 	);
 </script>
 
+<NavbarCustomer {linkKembali} />
+
+{#if panelKiriTerbuka}
+	<div class="fixed top-0 left-0 z-40 flex h-screen w-1/4 flex-col bg-zinc-800 px-12 text-white">
+		<div class="flex items-center gap-2">
+			<a href="/" class="text-3xl font-bold tracking-wide">MZHR</a>
+		</div>
+	</div>
+{/if}
 <Halaman {panelKiriTerbuka}>
 	{@render children?.()}
 </Halaman>

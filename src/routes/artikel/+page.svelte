@@ -6,7 +6,6 @@
 	import P from '$lib/common/ui/P.svelte';
 	import HalamanCustomer from '$lib/customer/HalamanCustomer.svelte';
 	import LayoutBlog from '$lib/customer/LayoutBlog.svelte';
-	import Navbar from '$lib/customer/navbar/Navbar.svelte';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
@@ -20,7 +19,6 @@
 	<title>Artikel | MZHR</title>
 </svelte:head>
 
-<Navbar />
 <HalamanCustomer {data}>
 	<LayoutBlog>
 		{#snippet kiri()}

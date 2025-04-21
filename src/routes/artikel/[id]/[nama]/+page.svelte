@@ -6,7 +6,6 @@
 	import HalamanCustomer from '$lib/customer/HalamanCustomer.svelte';
 	import KontainerKonten from '$lib/customer/KontainerKonten.svelte';
 	import LayoutBlog from '$lib/customer/LayoutBlog.svelte';
-	import Navbar from '$lib/customer/navbar/Navbar.svelte';
 	import DaftarArtikelTerbaru from '../../DaftarArtikelTerbaru.svelte';
 	import type { PageProps } from './$types';
 
@@ -32,8 +31,7 @@
 	{/if}
 </svelte:head>
 
-<Navbar linkKembali="/artikel" />
-<HalamanCustomer {data}>
+<HalamanCustomer {data} linkKembali="/artikel">
 	<LayoutBlog>
 		{#snippet kiri()}
 			{#if !data.galat && artikel}
