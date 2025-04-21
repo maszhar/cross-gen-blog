@@ -9,7 +9,7 @@
 	import TableHead from '$lib/common/ui/TableHead.svelte';
 	import TableRow from '$lib/common/ui/TableRow.svelte';
 	import Halaman from '$lib/customer/Halaman.svelte';
-	import Navbar from '$lib/customer/navbar/Navbar.svelte';
+	import Navbar from '$lib/common/ui/navbar/Navbar.svelte';
 
 	const jumlahKolom = 4;
 	let loading = $state(true);

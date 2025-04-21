@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Navbar from './navbar/Navbar.svelte';
-	import NavbarLink from './navbar/NavbarLink.svelte';
+	import Navbar from '../common/ui/navbar/Navbar.svelte';
+	import NavbarLink from '../common/ui/navbar/NavbarLink.svelte';
 
 	interface Properti {
 		linkKembali?: string;

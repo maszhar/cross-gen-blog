@@ -4,7 +4,7 @@
 	import Button from '$lib/common/ui/Button.svelte';
 	import Spinner from '$lib/common/ui/Spinner.svelte';
 	import Halaman from '$lib/customer/Halaman.svelte';
-	import Navbar from '$lib/customer/navbar/Navbar.svelte';
+	import Navbar from '$lib/common/ui/navbar/Navbar.svelte';
 	import { AdminPageData } from '../AdminPageData';
 
 	const dataAdmin = AdminPageData.instance;

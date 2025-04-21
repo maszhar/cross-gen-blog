@@ -3,7 +3,7 @@
 	import PanelKiri from '$lib/admin/panel-kiri/PanelKiri.svelte';
 	import Button from '$lib/common/ui/Button.svelte';
 	import Halaman from '$lib/customer/Halaman.svelte';
-	import Navbar from '$lib/customer/navbar/Navbar.svelte';
+	import Navbar from '$lib/common/ui/navbar/Navbar.svelte';
 	import { AdminPageData } from '../../AdminPageData';
 	import FormProyek from '../FormProyek.svelte';
 

@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import H1 from '$lib/common/ui/H1.svelte';
 	import Halaman from '$lib/customer/Halaman.svelte';
-	import Navbar from '$lib/customer/navbar/Navbar.svelte';
+	import Navbar from '$lib/common/ui/navbar/Navbar.svelte';
 	import { AdminPageData } from '../../../admin/AdminPageData';
 
 	const adminData = AdminPageData.instance;

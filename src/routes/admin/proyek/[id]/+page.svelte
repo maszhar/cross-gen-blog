@@ -7,7 +7,7 @@
 	import Spinner from '$lib/common/ui/Spinner.svelte';
 	import Halaman from '$lib/customer/Halaman.svelte';
 	import KontainerKonten from '$lib/customer/KontainerKonten.svelte';
-	import Navbar from '$lib/customer/navbar/Navbar.svelte';
+	import Navbar from '$lib/common/ui/navbar/Navbar.svelte';
 	import { AdminPageData } from '../../AdminPageData';
 	import FormProyek from '../FormProyek.svelte';
 

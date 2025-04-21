@@ -4,7 +4,7 @@
 	import type { IsiArtikelBerstatus } from '$lib/common/entitas/IsiArtikelBerstatus.svelte';
 	import Button from '$lib/common/ui/Button.svelte';
 	import Spinner from '$lib/common/ui/Spinner.svelte';
-	import Navbar from '$lib/customer/navbar/Navbar.svelte';
+	import Navbar from '$lib/common/ui/navbar/Navbar.svelte';
 	import { AdminPageData } from '../../AdminPageData';
 	import EditorArtikel from '../EditorArtikel.svelte';
 
