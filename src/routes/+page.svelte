@@ -20,17 +20,19 @@
 <HalamanCustomer {data} tanpaTepi>
 	<div
 		style="height: 85vh"
-		class="flex flex-col items-center justify-center bg-white dark:bg-sky-950"
+		class="flex flex-col items-center justify-center bg-white px-4 dark:bg-sky-950"
 	>
-		<h1 class="text-8xl font-bold text-black dark:text-white">MZHR</h1>
-		<div class="mt-6 text-2xl">Belajar teknologi untuk memudahkan kehidupan</div>
+		<h1 class="text-7xl font-bold text-black sm:text-8xl dark:text-white">MZHR</h1>
+		<div class="mt-6 text-center text-xl sm:text-2xl">
+			Belajar teknologi untuk memudahkan kehidupan
+		</div>
 
 		<div class="mt-12 flex">
 			<LinkLandingPage href="/artikel">Artikel</LinkLandingPage>
 		</div>
 	</div>
 
-	<div class="bg-green-50 px-16 py-10 dark:bg-zinc-800">
+	<div class="bg-green-50 px-4 py-10 sm:px-16 dark:bg-zinc-800">
 		<H1 class="text-center">Artikel Terbaru</H1>
 
 		{#if koleksiArtikelTerbaru.length > 0}
@@ -48,7 +50,7 @@
 		{/if}
 	</div>
 
-	<div class="px-16 py-10">
+	<div class="px-4 py-10 sm:px-16">
 		<H1 class="text-center">Kontak</H1>
 
 		<div class="flex gap-2 text-lg">
