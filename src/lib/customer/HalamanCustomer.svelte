@@ -13,8 +13,15 @@
 			kategoriFooterMasihAda: boolean;
 		};
 		linkKembali?: string;
+		tanpaTepi?: boolean;
 	}
-	const { children, panelKiriTerbuka = false, data, linkKembali }: Properti = $props();
+	const {
+		children,
+		panelKiriTerbuka = false,
+		data,
+		linkKembali,
+		tanpaTepi = false
+	}: Properti = $props();
 
 	const koleksiKategoriFooter = data.dataKoleksiKategoriFooter.map((item) =>
 		Kategori.deserialize(item)
@@ -30,7 +37,7 @@
 		</div>
 	</div>
 {/if}
-<Halaman {panelKiriTerbuka}>
+<Halaman {panelKiriTerbuka} {tanpaTepi}>
 	{@render children?.()}
 </Halaman>
 <div class="grid min-h-40 grid-cols-4 gap-8 bg-zinc-800 px-16 py-8 text-white">

@@ -4,8 +4,9 @@
 	interface Properti {
 		children?: Snippet;
 		panelKiriTerbuka?: boolean;
+		tanpaTepi?: boolean;
 	}
-	const { children, panelKiriTerbuka = false }: Properti = $props();
+	const { children, panelKiriTerbuka = false, tanpaTepi = false }: Properti = $props();
 </script>
 
 <div
@@ -13,7 +14,7 @@
 		? 'pl-48'
 		: ''}"
 >
-	<div class="px-4 py-8 sm:px-20 lg:px-8 xl:px-28">
+	<div class={!tanpaTepi ? 'px-4 py-8 sm:px-20 lg:px-8 xl:px-28' : ''}>
 		{@render children?.()}
 	</div>
 </div>

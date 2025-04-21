@@ -1,35 +1,61 @@
 <script lang="ts">
-	import Button from '$lib/common/ui/Button.svelte';
+	import { Artikel } from '$lib/common/entitas/Artikel';
 	import H1 from '$lib/common/ui/H1.svelte';
-	import P from '$lib/common/ui/P.svelte';
 	import HalamanCustomer from '$lib/customer/HalamanCustomer.svelte';
-	import KontainerKonten from '$lib/customer/KontainerKonten.svelte';
 	import type { PageProps } from './$types';
+	import LinkLandingPage from './LinkLandingPage.svelte';
 
 	const { data }: PageProps = $props();
+
+	const koleksiArtikelTerbaru = data.koleksiArtikelTerbaru?.map((data) =>
+		Artikel.deserialize(data)
+	);
 </script>
 
 <svelte:head>
-	<title>MZHR - Belajar untuk Memudahkan Kehidupan</title>
+	<title>MZHR - Belajar teknologi untuk memudahkan kehidupan</title>
 	<meta name="description" content="Blog akan berisi tentang proyek IT dan pembelajaran." />
 </svelte:head>
 
-<HalamanCustomer {data}>
-	<KontainerKonten>
-		<H1>Selamat Datang</H1>
+<HalamanCustomer {data} tanpaTepi>
+	<div
+		style="height: 85vh"
+		class="flex flex-col items-center justify-center bg-white dark:bg-sky-950"
+	>
+		<h1 class="text-8xl font-bold text-black dark:text-white">MZHR</h1>
+		<div class="mt-6 text-2xl">Belajar teknologi untuk memudahkan kehidupan</div>
 
-		<P>
-			Hai, saya Fikri Mustofa. Saya adalah penulis blog ini. Blog akan berisi tentang proyek IT dan
-			pembelajaran.
-		</P>
+		<div class="mt-12 flex">
+			<LinkLandingPage href="/artikel">Artikel</LinkLandingPage>
+		</div>
+	</div>
 
-		<P>Silakan klik tombol di bawah untuk memulai:</P>
-		<Button href="/artikel">Mulai</Button>
-		<br /><br />
-		<P>Jika membutuhkan komunikasi dengan saya, silakan hubungi kontak berikut :</P>
-		<ul>
-			<li>Email: fikrimustofa024@gmail.com</li>
-			<li>WhatsApp: +62 821 4252 2975</li>
-		</ul>
-	</KontainerKonten>
+	<div class="bg-green-50 px-16 py-10 dark:bg-zinc-800">
+		<H1 class="text-center">Artikel Terbaru</H1>
+
+		{#if koleksiArtikelTerbaru.length > 0}
+			<div class="flex flex-col gap-6 text-lg">
+				{#each koleksiArtikelTerbaru as artikel}
+					<a class="flex cursor-pointer gap-2 text-left" href={artikel.dapatkanLinkPublik()}>
+						<div class="w-1 bg-zinc-400"></div>
+						<div class="flex-grow truncate">{artikel.judul}</div>
+						<div>&gt;</div>
+					</a>
+				{/each}
+			</div>
+		{:else}
+			<em>Belum ada artikel</em>
+		{/if}
+	</div>
+
+	<div class="px-16 py-10">
+		<H1 class="text-center">Kontak</H1>
+
+		<div class="flex gap-2 text-lg">
+			<div>Email:</div>
+			<a href="mailto:fikrimustofa024@gmail.com" class="hover:text-blue-500"
+				>fikrimustofa024@gmail.com</a
+			>
+		</div>
+	</div>
 </HalamanCustomer>
