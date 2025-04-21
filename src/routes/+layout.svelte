@@ -1,8 +1,22 @@
 <script lang="ts">
+	import { Konteks } from '$lib/common/entitas/Konteks.svelte';
+	import { onMount } from 'svelte';
 	import '../app.css';
 	import type { LayoutProps } from './$types';
 
 	const { children, data }: LayoutProps = $props();
+
+	onMount(() => {
+		Konteks.aturTema((localStorage.getItem('temaGelap') ?? '1') === '1');
+
+		$effect(() => {
+			if (Konteks.dapatkanTema()) {
+				localStorage.setItem('temaGelap', '1');
+			} else {
+				localStorage.setItem('temaGelap', '0');
+			}
+		});
+	});
 </script>
 
 <svelte:head>
@@ -20,4 +34,6 @@
 	{/if}
 </svelte:head>
 
-{@render children()}
+<div class="{Konteks.dapatkanTema() ? 'dark' : ''} min-h-full">
+	{@render children()}
+</div>
